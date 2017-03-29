@@ -2,9 +2,7 @@ import $ from 'jquery';
 import './gridstack.js';
 
 describe('gridstack', () => {
-    'use strict';
-
-    var gridstackHTML = `
+    const gridstackHTML = `
         <div class="grid-stack">
            <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="4" data-gs-height="2">
                <div class="grid-stack-item-content"></div>
@@ -15,86 +13,74 @@ describe('gridstack', () => {
         </div>
     `;
 
-    describe('grid.getCellFromPixel', () => {
-        it('should compute cell from pixel coords', () => {
-            const grid = new window.GridStackUI(document.createElement('div'), {
-                cellWidth: 60,
-                cellHeight: 60
-            });
-            const cell = grid.getCellFromPixel({ left: 72, top: 125 });
-            expect(cell).toEqual({ x: 1, y: 2 });
+    it('getCellFromPixel method computes cell from pixel coords', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellWidth: 60,
+            cellHeight: 60
         });
-
-        it('should compute cell in empty grid', () => {
-            const grid = new window.GridStackUI(document.createElement('div'), {
-                cellHeight: 80
-            })
-            const cell = grid.getCellFromPixel({ left: 72, top: 100 });
-            expect(cell).toEqual({ x: 1, y: 1 });
-        });
+        const cell = grid.getCellFromPixel({ left: 72, top: 125 });
+        expect(cell).toEqual({ x: 1, y: 2 });
     });
 
-    describe('grid.cellWidth', () => {
-        it('should return default cellWidth', () => {
-            const grid = new window.GridStackUI(document.createElement('div'), {
-                cellHeight: 80,
-                width: 10
-            });
-            expect(grid.cellWidth()).toBe(60);
-        });
-
-        it('should return cellWidth passed in options', () => {
-            const grid = new window.GridStackUI(document.createElement('div'), {
-                cellWidth: 40,
-                cellHeight: 80,
-                width: 12
-            });
-            expect(grid.cellWidth()).toBe(40);
-        });
+    it('getCellFromPixel method computes cell in empty grid', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellHeight: 80
+        })
+        const cell = grid.getCellFromPixel({ left: 72, top: 100 });
+        expect(cell).toEqual({ x: 1, y: 1 });
     });
 
-    describe('grid.minWidth', () => {
-        it('should set data-gs-min-width to 2', () => {
-            const grid = new window.GridStackUI(document.createElement('div'));
-            const cell = document.createElement('div');
-            grid.addWidget(cell);
-            grid.minWidth(cell, 2);
-            expect(cell.getAttribute('data-gs-min-width')).toBe('2');
+    it('cellWidth method returns default cellWidth', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellHeight: 80,
+            width: 10
         });
+        expect(grid.cellWidth()).toBe(60);
     });
 
-    describe('grid.maxWidth', () => {
-        it('should set data-gs-min-width to 2', () => {
-            const grid = new window.GridStackUI(document.createElement('div'));
-            const cell = document.createElement('div');
-            grid.addWidget(cell);
-            grid.maxWidth(cell, 2);
-            expect(cell.getAttribute('data-gs-max-width')).toBe('2');
+    it('cellWidth method returns value passed in options', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellWidth: 40,
+            cellHeight: 80,
+            width: 12
         });
+        expect(grid.cellWidth()).toBe(40);
     });
 
-    describe('grid.minHeight', () => {
-        it('should set data-gs-min-height to 2', () => {
-            const grid = new window.GridStackUI(document.createElement('div'), {
-                cellHeight: 80
-            });
-            const cell = document.createElement('div');
-            grid.addWidget(cell);
-            grid.minHeight(cell, 2);
-            expect(cell.getAttribute('data-gs-min-height')).toBe('2');
-        });
+    it('minWidth method sets attribute', () => {
+        const grid = new window.GridStackUI(document.createElement('div'));
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.minWidth(cell, 2);
+        expect(cell.getAttribute('data-gs-min-width')).toBe('2');
     });
 
-    describe('grid.maxHeight', () => {
-        it('should set data-gs-min-height to 2', () => {
-            const grid = new window.GridStackUI(document.createElement('div'), {
-                cellHeight: 80
-            });
-            const cell = document.createElement('div');
-            grid.addWidget(cell);
-            grid.maxHeight(cell, 2);
-            expect(cell.getAttribute('data-gs-max-height')).toBe('2');
+    it('maxWidth method sets attribute', () => {
+        const grid = new window.GridStackUI(document.createElement('div'));
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.maxWidth(cell, 2);
+        expect(cell.getAttribute('data-gs-max-width')).toBe('2');
+    });
+
+    it('minHeight method sets attribute', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellHeight: 80
         });
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.minHeight(cell, 2);
+        expect(cell.getAttribute('data-gs-min-height')).toBe('2');
+    });
+
+    it('maxHeight method sets attribute', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellHeight: 80
+        });
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.maxHeight(cell, 2);
+        expect(cell.getAttribute('data-gs-max-height')).toBe('2');
     });
 
     describe('grid.isAreaEmpty', () => {
@@ -136,8 +122,8 @@ describe('gridstack', () => {
             for (var i = 0; i < items.length; i++) {
                 $el = $(grid.addWidget(items[i]));
                 $oldEl = $(items[i]);
-                expect(parseInt($oldEl.attr('data-gs-x'), 10)).toBe(parseInt($el.attr('data-gs-x'), 10));
-                expect(parseInt($oldEl.attr('data-gs-y'), 10)).toBe(parseInt($el.attr('data-gs-y'), 10));
+                expect($oldEl.attr('data-gs-x')).toBe($el.attr('data-gs-x'));
+                expect($oldEl.attr('data-gs-y')).toBe($el.attr('data-gs-y'));
             }
         });
         it('should not allow same x, y coordinates for widgets', () => {
@@ -159,56 +145,52 @@ describe('gridstack', () => {
         });
     });
 
-    describe('grid method addWidget with all parameters', () => {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
+    it('addWidget method with all parameters', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellHeight: 80,
+            float: true
         });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should allow same x, y coordinates for widgets', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80,
-                float: true
-            });
-            var widgetHTML =
-                '   <div class="grid-stack-item">' +
-                '       <div class="grid-stack-item-content"></div>' +
-                '   </div>';
-            var widget = grid.addWidget(widgetHTML, 6, 7, 2, 3, false, 1, 4, 2, 5, 'coolWidget');
-            var $widget = $(widget);
-            expect(parseInt($widget.attr('data-gs-x'), 10)).toBe(6);
-            expect(parseInt($widget.attr('data-gs-y'), 10)).toBe(7);
-            expect(parseInt($widget.attr('data-gs-width'), 10)).toBe(2);
-            expect(parseInt($widget.attr('data-gs-height'), 10)).toBe(3);
-            expect($widget.attr('data-gs-auto-position')).toBe(undefined);
-            expect(parseInt($widget.attr('data-gs-min-width'), 10)).toBe(1);
-            expect(parseInt($widget.attr('data-gs-max-width'), 10)).toBe(4);
-            expect(parseInt($widget.attr('data-gs-min-height'), 10)).toBe(2);
-            expect(parseInt($widget.attr('data-gs-max-height'), 10)).toBe(5);
-            expect($widget.attr('data-gs-id')).toBe('coolWidget');
+        const cell = document.createElement('div');
+        grid.addWidget(cell, 6, 7, 2, 3, false, 1, 4, 2, 5, 'coolWidget');
+        expect({
+            x: cell.getAttribute('data-gs-x'),
+            y: cell.getAttribute('data-gs-y'),
+            width: cell.getAttribute('data-gs-width'),
+            height: cell.getAttribute('data-gs-height'),
+            autoPosition: cell.getAttribute('data-gs-auto-position'),
+            minWidth: cell.getAttribute('data-gs-min-width'),
+            maxWidth: cell.getAttribute('data-gs-max-width'),
+            minHeight: cell.getAttribute('data-gs-min-height'),
+            maxHeight: cell.getAttribute('data-gs-max-height'),
+            id: cell.getAttribute('data-gs-id')
+        }).toEqual({
+            x: '6',
+            y: '7',
+            width: '2',
+            height: '3',
+            autoPosition: null,
+            minWidth: '1',
+            maxWidth: '4',
+            minHeight: '2',
+            maxHeight: '5',
+            id: 'coolWidget'
         });
     });
 
-    describe('grid method addWidget with autoPosition true', () => {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
+    it('addWidget sets attributes with inferred params if autoPosition is true', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellHeight: 80
         });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should change x, y coordinates for widgets', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80
-            });
-            var widgetHTML =
-                '   <div class="grid-stack-item">' +
-                '       <div class="grid-stack-item-content"></div>' +
-                '   </div>';
-            var widget = grid.addWidget(widgetHTML, 9, 7, 2, 3, true);
-            var $widget = $(widget);
-            expect(parseInt($widget.attr('data-gs-x'), 10)).not.toBe(6);
-            expect(parseInt($widget.attr('data-gs-y'), 10)).not.toBe(7);
+        grid.addWidget(document.createElement('div'), 0, 0, 4, 2);
+        grid.addWidget(document.createElement('div'), 4, 0, 4, 4);
+        const cell = document.createElement('div');
+        const widget = grid.addWidget(cell, 9, 7, 2, 3, true);
+        expect({
+            x: cell.getAttribute('data-gs-x'),
+            y: cell.getAttribute('data-gs-y')
+        }).toEqual({
+            x: '8',
+            y: '0'
         });
     });
 
@@ -239,43 +221,38 @@ describe('gridstack', () => {
         });
     });
 
-    describe('grid.resize', () => {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
-        });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should resize widget', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80
-            });
-            var items = $('.grid-stack-item');
-            grid.resize(items[0], 5, 5);
-            expect(parseInt($(items[0]).attr('data-gs-width'), 10)).toBe(5);
-            expect(parseInt($(items[0]).attr('data-gs-height'), 10)).toBe(5);
+    it('resize method sets width and height attributes', () => {
+        const grid = new window.GridStackUI(document.createElement('div'));
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.resize(cell, 5, 10);
+        expect({
+            width: cell.getAttribute('data-gs-width'),
+            height: cell.getAttribute('data-gs-height')
+        }).toEqual({
+            width: '5',
+            height: '10'
         });
     });
 
-    describe('grid.move', () => {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
+    it('move method sets x and y attributes', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            cellHeight: 80,
+            float: true
         });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should move widget', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80,
-                float: true
-            });
-            var items = $('.grid-stack-item');
-            grid.move(items[0], 5, 5);
-            expect(parseInt($(items[0]).attr('data-gs-x'), 10)).toBe(5);
-            expect(parseInt($(items[0]).attr('data-gs-y'), 10)).toBe(5);
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.move(cell, 5, 10);
+        expect({
+            x: cell.getAttribute('data-gs-x'),
+            y: cell.getAttribute('data-gs-y')
+        }).toEqual({
+            x: '5',
+            y: '10'
         });
     });
 
+    // TODO engine method
     describe('grid.moveNode', () => {
         beforeEach(function() {
             document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
@@ -309,49 +286,32 @@ describe('gridstack', () => {
         });
     });
 
-    describe('grid.update', () => {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
+    it('update method sets attributes', () => {
+        const grid = new window.GridStackUI(document.createElement('div'), {
+            float: true
         });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should move and resize widget', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80,
-                float: true
-            });
-            var items = $('.grid-stack-item');
-            grid.update(items[0], 5, 5, 5 ,5);
-            expect(parseInt($(items[0]).attr('data-gs-width'), 10)).toBe(5);
-            expect(parseInt($(items[0]).attr('data-gs-height'), 10)).toBe(5);
-            expect(parseInt($(items[0]).attr('data-gs-x'), 10)).toBe(5);
-            expect(parseInt($(items[0]).attr('data-gs-y'), 10)).toBe(5);
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.update(cell, 5, 6, 7, 8);
+        expect({
+            x: cell.getAttribute('data-gs-x'),
+            y: cell.getAttribute('data-gs-y'),
+            width: cell.getAttribute('data-gs-width'),
+            height: cell.getAttribute('data-gs-height')
+        }).toEqual({
+            x: '5',
+            y: '6',
+            width: '7',
+            height: '8'
         });
     });
 
-    describe('grid.opts.rtl', () => {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
+    it('rtl option adds grid-stack-rtl class', () => {
+        const container = document.createElement('div');
+        const grid = new window.GridStackUI(container, {
+            rtl: true
         });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should add grid-stack-rtl class', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80,
-                verticalMargin: 10,
-                rtl: true
-            });
-            expect($('.grid-stack').hasClass('grid-stack-rtl')).toBe(true);
-        });
-        it('should not add grid-stack-rtl class', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80,
-                verticalMargin: 10
-            });
-            expect($('.grid-stack').hasClass('grid-stack-rtl')).toBe(false);
-        });
+        expect(container.classList.contains('grid-stack-rtl')).toEqual(true);
     });
 
     xdescribe('grid.enableMove', () => {
@@ -457,34 +417,20 @@ describe('gridstack', () => {
         });
     });
 
-    describe('grid.enable', () => {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
-        });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should lock widgets', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80,
-                verticalMargin: 10
-            });
-            var items = $('.grid-stack-item');
-            for (var i = 0; i < items.length; i++) {
-                grid.locked(items[i], true);
-                expect($(items[i]).attr('data-gs-locked')).toBe('yes');
-            }
-        });
-        it('should unlock widgets', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
-                cellHeight: 80,
-                verticalMargin: 10
-            });
-            var items = $('.grid-stack-item');
-            for (var i = 0; i < items.length; i++) {
-                grid.locked(items[i], false);
-                expect($(items[i]).attr('data-gs-locked')).toBe(undefined);
-            }
-        });
+    it('lock widget', () => {
+        const grid = new window.GridStackUI(document.querySelector('.grid-stack'));
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.locked(cell, true);
+        expect(cell.getAttribute('data-gs-locked')).toEqual('yes');
+    });
+
+    it('unlock widget', () => {
+        const grid = new window.GridStackUI(document.querySelector('.grid-stack'));
+        const cell = document.createElement('div');
+        grid.addWidget(cell);
+        grid.locked(cell, true);
+        grid.locked(cell, false);
+        expect(cell.getAttribute('data-gs-locked')).toEqual(null);
     });
 });
