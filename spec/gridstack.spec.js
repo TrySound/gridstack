@@ -7,7 +7,7 @@ describe('gridstack', function() {
     var e;
     var w;
     var gridstackHTML = `
-        <div class="grid-stack" style="width: 432px;">
+        <div class="grid-stack">
            <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="4" data-gs-height="2">
                <div class="grid-stack-item-content"></div>
            </div>
@@ -168,47 +168,32 @@ describe('gridstack', function() {
 
     describe('grid.getCellFromPixel', function() {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
+
         afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
+            document.body.removeChild(document.querySelector('.grid-stack'));
         });
-        it('should return {x: 2, y: 1}.', function() {
+
+        it('should compute cell from pixel coords', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellWidth: 60,
+                cellHeight: 60
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
-            var pixel = {top: 100, left: 72};
+            var pixel = { left: 72, top: 125 };
             var cell = grid.getCellFromPixel(pixel);
-            expect(cell.x).toBe(2);
-            expect(cell.y).toBe(1);
+            expect(cell).toEqual({ x: 1, y: 2 });
         });
-        it('should return {x: 2, y: 1}.', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var pixel = {top: 100, left: 72};
-            var cell = grid.getCellFromPixel(pixel, false);
-            expect(cell.x).toBe(2);
-            expect(cell.y).toBe(1);
-        });
-        it('should return {x: 2, y: 1}.', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var pixel = {top: 100, left: 72};
-            var cell = grid.getCellFromPixel(pixel, true);
-            expect(cell.x).toBe(2);
-            expect(cell.y).toBe(1);
+
+        it('should compute cell in empty grid', () => {
+            var grid = new window.GridStackUI(document.createElement('div'), {
+                cellHeight: 80
+            })
+            var pixel = { left: 72, top: 100 };
+            var cell = grid.getCellFromPixel(pixel);
+            expect(cell).toEqual({ x: 1, y: 1 });
         });
     });
 
@@ -220,27 +205,22 @@ describe('gridstack', function() {
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
-        it('should return 1/12th of container width.', function() {
+        it('should return default cellWidth', function() {
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
-                width: 12
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var res = Math.round($('.grid-stack').outerWidth() / 12);
-            expect(grid.cellWidth()).toBe(res);
-        });
-        it('should return 1/10th of container width.', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10,
                 width: 10
             };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var res = Math.round($('.grid-stack').outerWidth() / 10);
-            expect(grid.cellWidth()).toBe(res);
+            var grid = $('.grid-stack').gridstack(options).data('gridstack');
+            expect(grid.cellWidth()).toBe(60);
+        });
+        it('should return cellWidth passed in options', function() {
+            var options = {
+                cellWidth: 40,
+                cellHeight: 80,
+                width: 12
+            };
+            var grid = $('.grid-stack').gridstack(options).data('gridstack');
+            expect(grid.cellWidth()).toBe(40);
         });
     });
 
@@ -254,8 +234,7 @@ describe('gridstack', function() {
         });
         it('should set data-gs-min-width to 2.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -279,8 +258,7 @@ describe('gridstack', function() {
         });
         it('should set data-gs-min-width to 2.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -304,8 +282,7 @@ describe('gridstack', function() {
         });
         it('should set data-gs-min-height to 2.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -329,8 +306,7 @@ describe('gridstack', function() {
         });
         it('should set data-gs-min-height to 2.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -354,8 +330,7 @@ describe('gridstack', function() {
         });
         it('should set return false.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -364,8 +339,7 @@ describe('gridstack', function() {
         });
         it('should set return true.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -385,8 +359,7 @@ describe('gridstack', function() {
         it('should log a warning if set_static is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -396,8 +369,7 @@ describe('gridstack', function() {
         it('should log a warning if _set_static_class is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -407,8 +379,7 @@ describe('gridstack', function() {
         it('should log a warning if is_area_empty is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -418,8 +389,7 @@ describe('gridstack', function() {
         it('should log a warning if batch_update is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -429,8 +399,7 @@ describe('gridstack', function() {
         it('should log a warning if get_cell_from_pixel is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -441,8 +410,7 @@ describe('gridstack', function() {
         it('should log a warning if cell_width is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -452,8 +420,7 @@ describe('gridstack', function() {
         it('should log a warning if cell_height is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -463,8 +430,7 @@ describe('gridstack', function() {
         it('should log a warning if _update_element is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -474,8 +440,7 @@ describe('gridstack', function() {
         it('should log a warning if min_width is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -488,8 +453,7 @@ describe('gridstack', function() {
         it('should log a warning if min_height is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -502,8 +466,7 @@ describe('gridstack', function() {
         it('should log a warning if remove_all is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -513,8 +476,7 @@ describe('gridstack', function() {
         it('should log a warning if remove_widget is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -527,8 +489,7 @@ describe('gridstack', function() {
         it('should log a warning if will_it_fit is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -538,8 +499,7 @@ describe('gridstack', function() {
         it('should log a warning if make_widget is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -552,8 +512,7 @@ describe('gridstack', function() {
         it('should log a warning if add_widget is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -566,8 +525,7 @@ describe('gridstack', function() {
         it('should log a warning if set_animation is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -577,8 +535,7 @@ describe('gridstack', function() {
         it('should log a warning if _prepare_element is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -591,8 +548,7 @@ describe('gridstack', function() {
         it('should log a warning if _is_one_column_mode is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -602,8 +558,7 @@ describe('gridstack', function() {
         it('should log a warning if _update_container_height is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -613,8 +568,7 @@ describe('gridstack', function() {
         it('should log a warning if _update_styles is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -624,8 +578,7 @@ describe('gridstack', function() {
         it('should log a warning if _init_styles is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -635,8 +588,7 @@ describe('gridstack', function() {
         it('should log a warning if _trigger_change_event is called.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -657,7 +609,6 @@ describe('gridstack', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 handle_class: 'grid-stack-header'
 
             };
@@ -669,7 +620,6 @@ describe('gridstack', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 item_class: 'grid-stack-item'
 
             };
@@ -681,7 +631,6 @@ describe('gridstack', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 placeholder_class: 'grid-stack-placeholder'
 
             };
@@ -693,7 +642,6 @@ describe('gridstack', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 placeholder_text: 'placeholder'
 
             };
@@ -704,30 +652,17 @@ describe('gridstack', function() {
         it('should log a warning if cell_height is set.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
-                cell_height: 80,
-                verticalMargin: 10
+                cell_height: 80
 
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
             expect(console.warn).toHaveBeenCalledWith('gridstack.js: Option `cell_height` is deprecated as of v0.2.5 and has been replaced with `cellHeight`. It will be **completely** removed in v1.0.');
         });
-        it('should log a warning if vertical_margin is set.', function() {
-            console.warn = jasmine.createSpy('log');
-            var options = {
-                cellHeight: 80,
-                vertical_margin: 10
-
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            expect(console.warn).toHaveBeenCalledWith('gridstack.js: Option `vertical_margin` is deprecated as of v0.2.5 and has been replaced with `verticalMargin`. It will be **completely** removed in v1.0.');
-        });
         it('should log a warning if min_width is set.', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 min_width: 2
 
             };
@@ -739,7 +674,6 @@ describe('gridstack', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 static_grid: false
 
             };
@@ -751,7 +685,6 @@ describe('gridstack', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 is_nested: false
 
             };
@@ -763,7 +696,6 @@ describe('gridstack', function() {
             console.warn = jasmine.createSpy('log');
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 always_show_resize_handle: false
 
             };
@@ -784,7 +716,6 @@ describe('gridstack', function() {
         it('should allow same x, y coordinates for widgets.', function() {
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 float: true
             };
             $('.grid-stack').gridstack(options);
@@ -801,8 +732,7 @@ describe('gridstack', function() {
         });
         it('should not allow same x, y coordinates for widgets.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -832,7 +762,6 @@ describe('gridstack', function() {
         it('should allow same x, y coordinates for widgets.', function() {
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 float: true
             };
             $('.grid-stack').gridstack(options);
@@ -866,8 +795,7 @@ describe('gridstack', function() {
         });
         it('should change x, y coordinates for widgets.', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -892,8 +820,7 @@ describe('gridstack', function() {
         });
         it('should cleanup gridstack', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -903,8 +830,7 @@ describe('gridstack', function() {
         });
         it('should cleanup gridstack but leave elements', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -926,8 +852,7 @@ describe('gridstack', function() {
         });
         it('should resize widget', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -949,7 +874,6 @@ describe('gridstack', function() {
         it('should move widget', function() {
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 float: true
             };
             $('.grid-stack').gridstack(options);
@@ -971,8 +895,7 @@ describe('gridstack', function() {
         });
         it('should do nothing and return node', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -984,8 +907,7 @@ describe('gridstack', function() {
         });
         it('should do nothing and return node', function() {
             var options = {
-                cellHeight: 80,
-                verticalMargin: 10
+                cellHeight: 80
             };
             $('.grid-stack').gridstack(options);
             var grid = $('.grid-stack').data('gridstack');
@@ -1012,7 +934,6 @@ describe('gridstack', function() {
         it('should move and resize widget', function() {
             var options = {
                 cellHeight: 80,
-                verticalMargin: 10,
                 float: true
             };
             $('.grid-stack').gridstack(options);
@@ -1023,69 +944,6 @@ describe('gridstack', function() {
             expect(parseInt($(items[0]).attr('data-gs-height'), 10)).toBe(5);
             expect(parseInt($(items[0]).attr('data-gs-x'), 10)).toBe(5);
             expect(parseInt($(items[0]).attr('data-gs-y'), 10)).toBe(5);
-        });
-    });
-
-    describe('grid.verticalMargin', function() {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
-        });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should return verticalMargin', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var vm = grid.verticalMargin();
-            expect(vm).toBe(10);
-        });
-        it('should return update verticalMargin', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            grid.verticalMargin(11);
-            expect(grid.verticalMargin()).toBe(11);
-        });
-        it('should do nothing', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var vm = grid.verticalMargin(10);
-            expect(grid.verticalMargin()).toBe(10);
-        });
-        it('should do nothing', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10,
-                height: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var vm = grid.verticalMargin(10);
-            expect(grid.verticalMargin()).toBe(10);
-        });
-        it('should not update styles', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-
-            spyOn(grid, '_updateStyles');
-            grid.verticalMargin(11, true);
-            expect(grid._updateStyles).not.toHaveBeenCalled();
         });
     });
 

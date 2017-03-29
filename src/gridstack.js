@@ -531,10 +531,6 @@ var GridStack = function(el, opts) {
         opts.cellHeight = opts.cell_height;
         obsoleteOpts('cell_height', 'cellHeight');
     }
-    if (typeof opts.vertical_margin !== 'undefined') {
-        opts.verticalMargin = opts.vertical_margin;
-        obsoleteOpts('vertical_margin', 'verticalMargin');
-    }
     if (typeof opts.min_width !== 'undefined') {
         opts.minWidth = opts.min_width;
         obsoleteOpts('min_width', 'minWidth');
@@ -564,8 +560,8 @@ var GridStack = function(el, opts) {
         placeholderText: '',
         handle: '.grid-stack-item-content',
         handleClass: null,
+        cellWidth: 60,
         cellHeight: 60,
-        verticalMargin: 20,
         auto: true,
         minWidth: 768,
         float: false,
@@ -588,7 +584,6 @@ var GridStack = function(el, opts) {
         rtl: 'auto',
         removable: false,
         removeTimeout: 2000,
-        verticalMarginUnit: 'px',
         cellHeightUnit: 'px',
         oneColumnModeClass: opts.oneColumnModeClass || 'grid-stack-one-column-mode',
         ddPlugin: null
@@ -618,7 +613,6 @@ var GridStack = function(el, opts) {
     } else {
         this.cellHeight(this.opts.cellHeight, true);
     }
-    this.verticalMargin(this.opts.verticalMargin, true);
 
     this.container.addClass(this.opts._class);
 
@@ -931,21 +925,9 @@ GridStack.prototype._updateStyles = function(maxHeight) {
         return ;
     }
 
-    if (!this.opts.verticalMargin || this.opts.cellHeightUnit === this.opts.verticalMarginUnit) {
-        getHeight = function(nbRows, nbMargins) {
-            return (self.opts.cellHeight * nbRows + self.opts.verticalMargin * nbMargins) +
-                self.opts.cellHeightUnit;
-        };
-    } else {
-        getHeight = function(nbRows, nbMargins) {
-            if (!nbRows || !nbMargins) {
-                return (self.opts.cellHeight * nbRows + self.opts.verticalMargin * nbMargins) +
-                    self.opts.cellHeightUnit;
-            }
-            return 'calc(' + ((self.opts.cellHeight * nbRows) + self.opts.cellHeightUnit) + ' + ' +
-                ((self.opts.verticalMargin * nbMargins) + self.opts.verticalMarginUnit) + ')';
-        };
-    }
+    getHeight = function(nbRows, nbMargins) {
+        return (self.opts.cellHeight * nbRows) + self.opts.cellHeightUnit;
+    };
 
     if (this._styles._max === 0) {
         Utils.insertCSSRule(this._styles, prefix, 'min-height: ' + getHeight(1, 0) + ';', 0);
@@ -987,15 +969,7 @@ GridStack.prototype._updateContainerHeight = function() {
     if (!this.opts.cellHeight) {
         return ;
     }
-    if (!this.opts.verticalMargin) {
-        this.container.css('height', (height * (this.opts.cellHeight)) + this.opts.cellHeightUnit);
-    } else if (this.opts.cellHeightUnit === this.opts.verticalMarginUnit) {
-        this.container.css('height', (height * (this.opts.cellHeight + this.opts.verticalMargin) -
-            this.opts.verticalMargin) + this.opts.cellHeightUnit);
-    } else {
-        this.container.css('height', 'calc(' + ((height * (this.opts.cellHeight)) + this.opts.cellHeightUnit) +
-            ' + ' + ((height * (this.opts.verticalMargin - 1)) + this.opts.verticalMarginUnit) + ')');
-    }
+    this.container.css('height', (height * (this.opts.cellHeight)) + this.opts.cellHeightUnit);
 };
 
 GridStack.prototype._isOneColumnMode = function() {
@@ -1515,24 +1489,6 @@ GridStack.prototype.update = function(el, x, y, width, height) {
     });
 };
 
-GridStack.prototype.verticalMargin = function(val, noUpdate) {
-    if (typeof val == 'undefined') {
-        return this.opts.verticalMargin;
-    }
-
-    var heightData = Utils.parseHeight(val);
-
-    if (this.opts.verticalMarginUnit === heightData.unit && this.opts.height === heightData.height) {
-        return ;
-    }
-    this.opts.verticalMarginUnit = heightData.unit;
-    this.opts.verticalMargin = heightData.height;
-
-    if (!noUpdate) {
-        this._updateStyles();
-    }
-};
-
 GridStack.prototype.cellHeight = function(val, noUpdate) {
     if (typeof val == 'undefined') {
         if (this.opts.cellHeight) {
@@ -1556,7 +1512,7 @@ GridStack.prototype.cellHeight = function(val, noUpdate) {
 };
 
 GridStack.prototype.cellWidth = function() {
-    return Math.round(this.container.outerWidth() / this.opts.width);
+    return this.opts.cellWidth;
 };
 
 GridStack.prototype.getCellFromPixel = function(position, useOffset) {
@@ -1565,10 +1521,7 @@ GridStack.prototype.getCellFromPixel = function(position, useOffset) {
     var relativeLeft = position.left - containerPos.left;
     var relativeTop = position.top - containerPos.top;
 
-    var columnWidth = Math.floor(this.container.width() / this.opts.width);
-    var rowHeight = Math.floor(this.container.height() / parseInt(this.container.attr('data-gs-current-height')));
-
-    return {x: Math.floor(relativeLeft / columnWidth), y: Math.floor(relativeTop / rowHeight)};
+    return {x: Math.floor(relativeLeft / this.opts.cellWidth), y: Math.floor(relativeTop / this.opts.cellHeight)};
 };
 
 GridStack.prototype.batchUpdate = function() {
