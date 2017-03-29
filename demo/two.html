@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Two grids demo</title>
 
@@ -15,11 +10,8 @@
     <link rel="stylesheet" href="../dist/gridstack-extra.css"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.0/jquery-ui.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
     <script src="../dist/gridstack.js"></script>
-    <script src="../dist/gridstack.jQueryUI.js"></script>
 
     <style type="text/css">
         #grid1 {
@@ -103,43 +95,41 @@
     </div>
 
 
-    <script type="text/javascript">
-        $(function () {
-            var options = {
-                width: 6,
-                float: false,
-                removable: '.trash',
-                removeTimeout: 100,
-                acceptWidgets: '.grid-stack-item'
-            };
-            $('#grid1').gridstack(options);
-            $('#grid2').gridstack(_.defaults({
-                float: true
-            }, options));
+    <script>
+        var options = {
+            width: 6,
+            float: false,
+            removable: '.trash',
+            removeTimeout: 100,
+            acceptWidgets: '.grid-stack-item'
+        };
+        $('#grid1').gridstack(options);
+        $('#grid2').gridstack(_.defaults({
+            float: true
+        }, options));
 
-            var items = [
-                {x: 0, y: 0, width: 2, height: 2},
-                {x: 3, y: 1, width: 1, height: 2},
-                {x: 4, y: 1, width: 1, height: 1},
-                {x: 2, y: 3, width: 3, height: 1},
-                {x: 2, y: 5, width: 1, height: 1}
-            ];
+        var items = [
+            {x: 0, y: 0, width: 2, height: 2},
+            {x: 3, y: 1, width: 1, height: 2},
+            {x: 4, y: 1, width: 1, height: 1},
+            {x: 2, y: 3, width: 3, height: 1},
+            {x: 2, y: 5, width: 1, height: 1}
+        ];
 
-            $('.grid-stack').each(function () {
-                var grid = $(this).data('gridstack');
+        $('.grid-stack').each(function () {
+            var grid = $(this).data('gridstack');
 
-                _.each(items, function (node) {
-                    grid.addWidget($('<div><div class="grid-stack-item-content" /><div/>'),
-                        node.x, node.y, node.width, node.height);
-                }, this);
-            });
+            _.each(items, function (node) {
+                grid.addWidget($('<div><div class="grid-stack-item-content" /><div/>'),
+                    node.x, node.y, node.width, node.height);
+            }, this);
+        });
 
-            $('.sidebar .grid-stack-item').draggable({
-                revert: 'invalid',
-                handle: '.grid-stack-item-content',
-                scroll: false,
-                appendTo: 'body'
-            });
+        $('.sidebar .grid-stack-item').draggable({
+            revert: 'invalid',
+            handle: '.grid-stack-item-content',
+            scroll: false,
+            appendTo: 'body'
         });
     </script>
 </body>

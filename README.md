@@ -12,8 +12,8 @@ Inspired by [gridster.js](https://github.com/ducksboard/gridster.js). Built with
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [Demo](#demo)
-- [Usage](#usage)
+- [Demo](#demo)
+- [Usage](#usage)
   - [Requirements](#requirements)
       - [Using gridstack.js with jQuery UI](#using-gridstackjs-with-jquery-ui)
   - [Install](#install)
@@ -37,8 +37,8 @@ Inspired by [gridster.js](https://github.com/ducksboard/gridster.js). Built with
   - [Nested grids](#nested-grids)
   - [Resizing active grid](#resizing-active-grid)
   - [Using AniJS](#using-anijs)
-- [The Team](#the-team)
-- [Changes](#changes)
+- [The Team](#the-team)
+- [Changes](#changes)
       - [v0.3.0-dev (Development Version)](#v030-dev-development-version)
       - [v0.2.6 (2016-08-17)](#v026-2016-08-17)
       - [v0.2.5 (2016-03-02)](#v025-2016-03-02)
@@ -48,7 +48,7 @@ Inspired by [gridster.js](https://github.com/ducksboard/gridster.js). Built with
       - [v0.2.1 (2014-12-09)](#v021-2014-12-09)
       - [v0.2.0 (2014-11-30)](#v020-2014-11-30)
       - [v0.1.0 (2014-11-18)](#v010-2014-11-18)
-- [License](#license)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
