@@ -50,59 +50,39 @@ describe('gridstack', function() {
     });
 
     describe('grid.getCellFromPixel', function() {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
-        });
-
-        afterEach(function() {
-            document.body.removeChild(document.querySelector('.grid-stack'));
-        });
-
         it('should compute cell from pixel coords', function() {
-            var options = {
+            const grid = new window.GridStackUI(document.createElement('div'), {
                 cellWidth: 60,
                 cellHeight: 60
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var pixel = { left: 72, top: 125 };
-            var cell = grid.getCellFromPixel(pixel);
+            });
+            const cell = grid.getCellFromPixel({ left: 72, top: 125 });
             expect(cell).toEqual({ x: 1, y: 2 });
         });
 
         it('should compute cell in empty grid', () => {
-            var grid = new window.GridStackUI(document.createElement('div'), {
+            const grid = new window.GridStackUI(document.createElement('div'), {
                 cellHeight: 80
             })
-            var pixel = { left: 72, top: 100 };
-            var cell = grid.getCellFromPixel(pixel);
+            const cell = grid.getCellFromPixel({ left: 72, top: 100 });
             expect(cell).toEqual({ x: 1, y: 1 });
         });
     });
 
-    describe('grid.cellWidth', function() {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
-        });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should return default cellWidth', function() {
-            var options = {
+    describe('grid.cellWidth', () => {
+        it('should return default cellWidth', () => {
+            const grid = new window.GridStackUI(document.createElement('div'), {
                 cellHeight: 80,
                 width: 10
-            };
-            var grid = $('.grid-stack').gridstack(options).data('gridstack');
+            });
             expect(grid.cellWidth()).toBe(60);
         });
-        it('should return cellWidth passed in options', function() {
-            var options = {
+
+        it('should return cellWidth passed in options', () => {
+            const grid = new window.GridStackUI(document.createElement('div'), {
                 cellWidth: 40,
                 cellHeight: 80,
                 width: 12
-            };
-            var grid = $('.grid-stack').gridstack(options).data('gridstack');
+            });
             expect(grid.cellWidth()).toBe(40);
         });
     });
