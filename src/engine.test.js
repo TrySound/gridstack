@@ -302,4 +302,43 @@ describe('gridstack engine', function() {
             expect(engine.isNodeChangedPosition(widget, 1, 2, 3, 4)).toEqual(false);
         });
     });
+
+    describe('setup of gridstack', function() {
+        it('should set default params correctly.', function() {
+            const w = {};
+            Engine.call(w);
+            expect(w.width).toBeUndefined();
+            expect(w.float).toBe(false);
+            expect(w.height).toEqual(0);
+            expect(w.nodes).toEqual([]);
+            expect(typeof w.onchange).toBe('function');
+            expect(w._updateCounter).toEqual(0);
+            expect(w._float).toEqual(w.float);
+        });
+
+        it('should set params correctly.', function() {
+            var fkt = function() { };
+            var arr = [1,2,3];
+            const w = {};
+            Engine.call(w, 1, fkt, true, 2, arr);
+            expect(w.width).toEqual(1);
+            expect(w.float).toBe(true);
+            expect(w.height).toEqual(2);
+            expect(w.nodes).toEqual(arr);
+            expect(w.onchange).toEqual(fkt);
+            expect(w._updateCounter).toEqual(0);
+            expect(w._float).toEqual(w.float);
+        });
+
+
+    });
+
+    describe('batch update', function() {
+        it('should set float and counter when calling batchUpdate.', function() {
+            const w = {};
+            Engine.prototype.batchUpdate.call(w);
+            expect(w.float).toBe(true);
+            expect(w._updateCounter).toEqual(1);
+        });
+    });
 });
