@@ -1,24 +1,7 @@
 import $ from 'jquery';
-import '../src/gridstack.js';
+import * as utils from './utils.js';
 
 describe('gridstack utils', function() {
-    'use strict';
-
-    var utils;
-
-    beforeEach(function() {
-        utils = window.GridStackUI.Utils;
-    });
-
-    describe('setup of utils', function() {
-
-        it('should set gridstack utils.', function() {
-            expect(utils).not.toBeNull();
-            expect(typeof utils).toBe('object');
-        });
-
-    });
-
     describe('test toBool', function() {
 
         it('should return booleans.', function() {
