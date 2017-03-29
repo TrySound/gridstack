@@ -9,8 +9,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'dist/gridstack.css': 'src/gridstack.scss',
-                    'dist/gridstack-extra.css': 'src/gridstack-extra.scss'
+                    'dist/gridstack.css': 'src/gridstack.scss'
                 }
             }
         },
