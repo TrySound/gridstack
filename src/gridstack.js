@@ -114,8 +114,6 @@ var GridStack = function(el, opts) {
 
     this.container.addClass(this.opts._class);
 
-    this._setStaticClass();
-
     if (isNested) {
         this.container.addClass('grid-stack-nested');
     }
@@ -1029,17 +1027,6 @@ GridStack.prototype.setStatic = function(staticValue) {
     this.opts.staticGrid = (staticValue === true);
     this.enableMove(!staticValue);
     this.enableResize(!staticValue);
-    this._setStaticClass();
-};
-
-GridStack.prototype._setStaticClass = function() {
-    var staticClassName = 'grid-stack-static';
-
-    if (this.opts.staticGrid === true) {
-        this.container.addClass(staticClassName);
-    } else {
-        this.container.removeClass(staticClassName);
-    }
 };
 
 GridStack.prototype._updateNodeWidths = function(oldWidth, newWidth) {

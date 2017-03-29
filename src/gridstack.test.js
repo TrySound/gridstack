@@ -15,40 +15,6 @@ describe('gridstack', function() {
         </div>
     `;
 
-    describe('grid._setStaticClass', function() {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
-        });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should add class grid-stack-static to the container.', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10,
-                staticGrid: true
-            };
-            $('.grid-stack').gridstack(options);
-            $('.grid-stack').removeClass('grid-stack-static');
-            var grid = $('.grid-stack').data('gridstack');
-            grid._setStaticClass();
-            expect($('.grid-stack').hasClass('grid-stack-static')).toBe(true);
-        });
-        it('should remove class grid-stack-static from the container.', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10,
-                staticGrid: false
-            };
-            $('.grid-stack').gridstack(options);
-            $('.grid-stack').addClass('grid-stack-static');
-            var grid = $('.grid-stack').data('gridstack');
-            grid._setStaticClass();
-            expect($('.grid-stack').hasClass('grid-stack-static')).toBe(false);
-        });
-    });
-
     describe('grid.getCellFromPixel', function() {
         it('should compute cell from pixel coords', function() {
             const grid = new window.GridStackUI(document.createElement('div'), {
