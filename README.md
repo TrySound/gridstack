@@ -1,20 +1,12 @@
-gridstack.js
-============
+# gridstack.js [![Build Status][travis-img]][travis]
 
-[![Build Status](https://travis-ci.org/troolee/gridstack.js.svg?branch=master)](https://travis-ci.org/troolee/gridstack.js)
-[![Coverage Status](https://coveralls.io/repos/github/troolee/gridstack.js/badge.svg?branch=master)](https://coveralls.io/github/troolee/gridstack.js?branch=master)
-[![Dependency Status](https://david-dm.org/troolee/gridstack.js.svg)](https://david-dm.org/troolee/gridstack.js)
-[![devDependency Status](https://david-dm.org/troolee/gridstack.js/dev-status.svg)](https://david-dm.org/troolee/gridstack.js#info=devDependencies)
-[![Stories in Ready](https://badge.waffle.io/troolee/gridstack.js.png?label=ready&title=Ready)](http://waffle.io/troolee/gridstack.js)
+[travis-img]: https://travis-ci.org/TrySound/gridstack.svg
+[travis]: https://travis-ci.org/TrySound/gridstack
 
-gridstack.js is a jQuery plugin for widget layout. This is drag-and-drop multi-column grid. It allows you to build
+gridstack is a jQuery plugin for widget layout. This is drag-and-drop multi-column grid. It allows you to build
 draggable responsive bootstrap v3 friendly layouts. It also works great with [knockout.js](http://knockoutjs.com), [angular.js](https://angularjs.org) and touch devices.
 
 Inspired by [gridster.js](https://github.com/ducksboard/gridster.js). Built with love.
-
-Join gridstack.js on Slack: https://gridstackjs.troolee.com
-
-[![Slack Status](https://gridstackjs.troolee.com/badge.svg)](https://gridstackjs.troolee.com)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

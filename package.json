@@ -1,14 +1,15 @@
 {
   "name": "@trysound/gridstack",
   "version": "0.3.0",
-  "description": "gridstack.js is a jQuery plugin for widget layout",
+  "description": "gridstack is a jQuery plugin for widget layout",
   "main": "dist/gridstack.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/troolee/gridstack.js.git"
+    "url": "git+https://github.com/trysound/gridstack.git"
   },
   "scripts": {
     "build": "grunt",
+    "prepublish": "yarn run build",
     "test": "cross-env BABEL_ENV=test jest --coverage"
   },
   "jest": {
@@ -36,9 +37,9 @@
   "author": "Pavel Reznikov <pashka.reznikov@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/troolee/gridstack.js/issues"
+    "url": "https://github.com/trysound/gridstack/issues"
   },
-  "homepage": "http://troolee.github.io/gridstack.js/",
+  "homepage": "http://trysound.github.io/gridstack",
   "dependencies": {
     "jquery": "^3.1.0",
     "jquery-ui": "^1.12.0",
