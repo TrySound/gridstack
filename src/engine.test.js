@@ -305,40 +305,34 @@ describe('gridstack engine', function() {
 
     describe('setup of gridstack', function() {
         it('should set default params correctly.', function() {
-            const w = {};
-            Engine.call(w);
-            expect(w.width).toBeUndefined();
-            expect(w.float).toBe(false);
-            expect(w.height).toEqual(0);
-            expect(w.nodes).toEqual([]);
-            expect(typeof w.onchange).toBe('function');
-            expect(w._updateCounter).toEqual(0);
-            expect(w._float).toEqual(w.float);
+            const engine = new Engine();
+            expect(engine.width).toBeUndefined();
+            expect(engine.float).toBe(false);
+            expect(engine.height).toEqual(0);
+            expect(engine.nodes).toEqual([]);
+            expect(typeof engine.onchange).toBe('function');
+            expect(engine._updateCounter).toEqual(0);
+            expect(engine._float).toEqual(engine.float);
         });
 
         it('should set params correctly.', function() {
-            var fkt = function() { };
-            var arr = [1,2,3];
-            const w = {};
-            Engine.call(w, 1, fkt, true, 2, arr);
-            expect(w.width).toEqual(1);
-            expect(w.float).toBe(true);
-            expect(w.height).toEqual(2);
-            expect(w.nodes).toEqual(arr);
-            expect(w.onchange).toEqual(fkt);
-            expect(w._updateCounter).toEqual(0);
-            expect(w._float).toEqual(w.float);
+            const fkt = function() { };
+            const arr = [1,2,3];
+            const engine = new Engine(1, fkt, true, 2, arr);
+            expect(engine.width).toEqual(1);
+            expect(engine.float).toBe(true);
+            expect(engine.height).toEqual(2);
+            expect(engine.nodes).toEqual(arr);
+            expect(engine.onchange).toEqual(fkt);
+            expect(engine._updateCounter).toEqual(0);
+            expect(engine._float).toEqual(engine.float);
         });
-
-
     });
 
-    describe('batch update', function() {
-        it('should set float and counter when calling batchUpdate.', function() {
-            const w = {};
-            Engine.prototype.batchUpdate.call(w);
-            expect(w.float).toBe(true);
-            expect(w._updateCounter).toEqual(1);
-        });
+    it('batchUpdate sets float and counter', function() {
+        const engine = new Engine();
+        engine.batchUpdate();
+        expect(engine.float).toBe(true);
+        expect(engine._updateCounter).toEqual(1);
     });
 });
