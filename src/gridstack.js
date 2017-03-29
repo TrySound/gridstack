@@ -3,22 +3,6 @@ import _ from 'lodash';
 
 var scope = window;
 
-var obsolete = function(f, oldName, newName) {
-    var wrapper = function() {
-        console.warn('gridstack.js: Function `' + oldName + '` is deprecated as of v0.2.5 and has been replaced ' +
-        'with `' + newName + '`. It will be **completely** removed in v1.0.');
-        return f.apply(this, arguments);
-    };
-    wrapper.prototype = f.prototype;
-
-    return wrapper;
-};
-
-var obsoleteOpts = function(oldName, newName) {
-    console.warn('gridstack.js: Option `' + oldName + '` is deprecated as of v0.2.5 and has been replaced with `' +
-        newName + '`. It will be **completely** removed in v1.0.');
-};
-
 var Utils = {
     isIntercepted: function(a, b) {
         return !(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
@@ -92,16 +76,6 @@ var Utils = {
         return {height: height, unit: heightUnit};
     }
 };
-
-// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-Utils.is_intercepted = obsolete(Utils.isIntercepted, 'is_intercepted', 'isIntercepted');
-
-Utils.create_stylesheet = obsolete(Utils.createStylesheet, 'create_stylesheet', 'createStylesheet');
-
-Utils.remove_stylesheet = obsolete(Utils.removeStylesheet, 'remove_stylesheet', 'removeStylesheet');
-
-Utils.insert_css_rule = obsolete(Utils.insertCSSRule, 'insert_css_rule', 'insertCSSRule');
-// jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
 /**
 * @class GridStackDragDropPlugin
@@ -509,45 +483,6 @@ var GridStack = function(el, opts) {
     opts = opts || {};
 
     this.container = $(el);
-
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if (typeof opts.handle_class !== 'undefined') {
-        opts.handleClass = opts.handle_class;
-        obsoleteOpts('handle_class', 'handleClass');
-    }
-    if (typeof opts.item_class !== 'undefined') {
-        opts.itemClass = opts.item_class;
-        obsoleteOpts('item_class', 'itemClass');
-    }
-    if (typeof opts.placeholder_class !== 'undefined') {
-        opts.placeholderClass = opts.placeholder_class;
-        obsoleteOpts('placeholder_class', 'placeholderClass');
-    }
-    if (typeof opts.placeholder_text !== 'undefined') {
-        opts.placeholderText = opts.placeholder_text;
-        obsoleteOpts('placeholder_text', 'placeholderText');
-    }
-    if (typeof opts.cell_height !== 'undefined') {
-        opts.cellHeight = opts.cell_height;
-        obsoleteOpts('cell_height', 'cellHeight');
-    }
-    if (typeof opts.min_width !== 'undefined') {
-        opts.minWidth = opts.min_width;
-        obsoleteOpts('min_width', 'minWidth');
-    }
-    if (typeof opts.static_grid !== 'undefined') {
-        opts.staticGrid = opts.static_grid;
-        obsoleteOpts('static_grid', 'staticGrid');
-    }
-    if (typeof opts.is_nested !== 'undefined') {
-        opts.isNested = opts.is_nested;
-        obsoleteOpts('is_nested', 'isNested');
-    }
-    if (typeof opts.always_show_resize_handle !== 'undefined') {
-        opts.alwaysShowResizeHandle = opts.always_show_resize_handle;
-        obsoleteOpts('always_show_resize_handle', 'alwaysShowResizeHandle');
-    }
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
     opts.itemClass = opts.itemClass || 'grid-stack-item';
     var isNested = this.container.closest('.' + opts.itemClass).length > 0;
@@ -1564,83 +1499,6 @@ GridStack.prototype.setGridWidth = function(gridWidth,doNotPropagate) {
     this.grid.width = gridWidth;
     this.container.addClass('grid-stack-' + gridWidth);
 };
-
-// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-GridStackEngine.prototype.batch_update = obsolete(GridStackEngine.prototype.batchUpdate);
-GridStackEngine.prototype._fix_collisions = obsolete(GridStackEngine.prototype._fixCollisions,
-    '_fix_collisions', '_fixCollisions');
-GridStackEngine.prototype.is_area_empty = obsolete(GridStackEngine.prototype.isAreaEmpty,
-    'is_area_empty', 'isAreaEmpty');
-GridStackEngine.prototype._sort_nodes = obsolete(GridStackEngine.prototype._sortNodes,
-    '_sort_nodes', '_sortNodes');
-GridStackEngine.prototype._pack_nodes = obsolete(GridStackEngine.prototype._packNodes,
-    '_pack_nodes', '_packNodes');
-GridStackEngine.prototype._prepare_node = obsolete(GridStackEngine.prototype._prepareNode,
-    '_prepare_node', '_prepareNode');
-GridStackEngine.prototype.clean_nodes = obsolete(GridStackEngine.prototype.cleanNodes,
-    'clean_nodes', 'cleanNodes');
-GridStackEngine.prototype.get_dirty_nodes = obsolete(GridStackEngine.prototype.getDirtyNodes,
-    'get_dirty_nodes', 'getDirtyNodes');
-GridStackEngine.prototype.add_node = obsolete(GridStackEngine.prototype.addNode,
-    'add_node', 'addNode, ');
-GridStackEngine.prototype.remove_node = obsolete(GridStackEngine.prototype.removeNode,
-    'remove_node', 'removeNode');
-GridStackEngine.prototype.can_move_node = obsolete(GridStackEngine.prototype.canMoveNode,
-    'can_move_node', 'canMoveNode');
-GridStackEngine.prototype.move_node = obsolete(GridStackEngine.prototype.moveNode,
-    'move_node', 'moveNode');
-GridStackEngine.prototype.get_grid_height = obsolete(GridStackEngine.prototype.getGridHeight,
-    'get_grid_height', 'getGridHeight');
-GridStackEngine.prototype.begin_update = obsolete(GridStackEngine.prototype.beginUpdate,
-    'begin_update', 'beginUpdate');
-GridStackEngine.prototype.end_update = obsolete(GridStackEngine.prototype.endUpdate,
-    'end_update', 'endUpdate');
-GridStackEngine.prototype.can_be_placed_with_respect_to_height =
-    obsolete(GridStackEngine.prototype.canBePlacedWithRespectToHeight,
-    'can_be_placed_with_respect_to_height', 'canBePlacedWithRespectToHeight');
-GridStack.prototype._trigger_change_event = obsolete(GridStack.prototype._triggerChangeEvent,
-    '_trigger_change_event', '_triggerChangeEvent');
-GridStack.prototype._init_styles = obsolete(GridStack.prototype._initStyles,
-    '_init_styles', '_initStyles');
-GridStack.prototype._update_styles = obsolete(GridStack.prototype._updateStyles,
-    '_update_styles', '_updateStyles');
-GridStack.prototype._update_container_height = obsolete(GridStack.prototype._updateContainerHeight,
-    '_update_container_height', '_updateContainerHeight');
-GridStack.prototype._is_one_column_mode = obsolete(GridStack.prototype._isOneColumnMode,
-    '_is_one_column_mode','_isOneColumnMode');
-GridStack.prototype._prepare_element = obsolete(GridStack.prototype._prepareElement,
-    '_prepare_element', '_prepareElement');
-GridStack.prototype.add_widget = obsolete(GridStack.prototype.addWidget,
-    'add_widget', 'addWidget');
-GridStack.prototype.make_widget = obsolete(GridStack.prototype.makeWidget,
-    'make_widget', 'makeWidget');
-GridStack.prototype.will_it_fit = obsolete(GridStack.prototype.willItFit,
-    'will_it_fit', 'willItFit');
-GridStack.prototype.remove_widget = obsolete(GridStack.prototype.removeWidget,
-    'remove_widget', 'removeWidget');
-GridStack.prototype.remove_all = obsolete(GridStack.prototype.removeAll,
-    'remove_all', 'removeAll');
-GridStack.prototype.min_height = obsolete(GridStack.prototype.minHeight,
-    'min_height', 'minHeight');
-GridStack.prototype.min_width = obsolete(GridStack.prototype.minWidth,
-    'min_width', 'minWidth');
-GridStack.prototype._update_element = obsolete(GridStack.prototype._updateElement,
-    '_update_element', '_updateElement');
-GridStack.prototype.cell_height = obsolete(GridStack.prototype.cellHeight,
-    'cell_height', 'cellHeight');
-GridStack.prototype.cell_width = obsolete(GridStack.prototype.cellWidth,
-    'cell_width', 'cellWidth');
-GridStack.prototype.get_cell_from_pixel = obsolete(GridStack.prototype.getCellFromPixel,
-    'get_cell_from_pixel', 'getCellFromPixel');
-GridStack.prototype.batch_update = obsolete(GridStack.prototype.batchUpdate,
-    'batch_update', 'batchUpdate');
-GridStack.prototype.is_area_empty = obsolete(GridStack.prototype.isAreaEmpty,
-    'is_area_empty', 'isAreaEmpty');
-GridStack.prototype.set_static = obsolete(GridStack.prototype.setStatic,
-    'set_static', 'setStatic');
-GridStack.prototype._set_static_class = obsolete(GridStack.prototype._setStaticClass,
-    '_set_static_class', '_setStaticClass');
-// jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
 scope.GridStackUI = GridStack;
 
