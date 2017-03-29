@@ -1,3 +1,6 @@
+import $ from 'jquery';
+import '../src/gridstack.js';
+
 describe('gridstack utils', function() {
     'use strict';
 

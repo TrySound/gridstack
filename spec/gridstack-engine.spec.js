@@ -1,3 +1,5 @@
+import '../src/gridstack.js';
+
 describe('gridstack engine', function() {
     'use strict';
 
