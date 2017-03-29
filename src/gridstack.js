@@ -64,7 +64,6 @@ var GridStack = function(el, opts) {
         auto: true,
         minWidth: 768,
         float: false,
-        staticGrid: false,
         _class: 'grid-stack-instance-' + (Math.random() * 10000).toFixed(0),
         alwaysShowResizeHandle: opts.alwaysShowResizeHandle || false,
         resizable: _.defaults(opts.resizable || {}, {
@@ -182,9 +181,6 @@ var GridStack = function(el, opts) {
             _.each(self.grid.nodes, function(node) {
                 self.container.append(node.el);
 
-                if (self.opts.staticGrid) {
-                    return;
-                }
                 if (node.noMove || self.opts.disableDrag) {
                     self.dd.draggable(node.el, 'disable');
                 }
@@ -202,10 +198,6 @@ var GridStack = function(el, opts) {
             self.container.removeClass(self.opts.oneColumnModeClass);
             oneColumnMode = false;
 
-            if (self.opts.staticGrid) {
-                return;
-            }
-
             _.each(self.grid.nodes, function(node) {
                 if (!node.noMove && !self.opts.disableDrag) {
                     self.dd.draggable(node.el, 'enable');
@@ -222,7 +214,7 @@ var GridStack = function(el, opts) {
     $(window).resize(this.onResizeHandler);
     this.onResizeHandler();
 
-    if (!self.opts.staticGrid && typeof self.opts.removable === 'string') {
+    if (typeof self.opts.removable === 'string') {
         var trashZone = $(self.opts.removable);
         if (!this.dd.isDroppable(trashZone)) {
             this.dd.droppable(trashZone, {
@@ -248,7 +240,7 @@ var GridStack = function(el, opts) {
             });
     }
 
-    if (!self.opts.staticGrid && self.opts.acceptWidgets) {
+    if (self.opts.acceptWidgets) {
         var draggingElement = null;
 
         var onDrag = function(event, ui) {
@@ -1021,12 +1013,6 @@ GridStack.prototype.commit = function() {
 
 GridStack.prototype.isAreaEmpty = function(x, y, width, height) {
     return this.grid.isAreaEmpty(x, y, width, height);
-};
-
-GridStack.prototype.setStatic = function(staticValue) {
-    this.opts.staticGrid = (staticValue === true);
-    this.enableMove(!staticValue);
-    this.enableResize(!staticValue);
 };
 
 GridStack.prototype._updateNodeWidths = function(oldWidth, newWidth) {
