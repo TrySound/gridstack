@@ -1057,14 +1057,4 @@ scope.GridStackUI.Utils = Utils;
 scope.GridStackUI.Engine = GridStackEngine;
 scope.GridStackUI.GridStackDragDropPlugin = GridStackDragDropPlugin;
 
-$.fn.gridstack = function(opts) {
-    return this.each(function() {
-        var o = $(this);
-        if (!o.data('gridstack')) {
-            o
-                .data('gridstack', new GridStack(this, opts));
-        }
-    });
-};
-
 export default GridStack;

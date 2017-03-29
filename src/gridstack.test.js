@@ -99,47 +99,37 @@ describe('gridstack', () => {
 
     describe('grid.isAreaEmpty', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should set return false', () => {
-            var options = {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var shouldBeFalse = grid.isAreaEmpty(1, 1, 1, 1);
-            expect(shouldBeFalse).toBe(false);
+            });
+            expect(grid.isAreaEmpty(1, 1, 1, 1)).toBe(false);
         });
         it('should set return true', () => {
-            var options = {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            var shouldBeTrue = grid.isAreaEmpty(5, 5, 1, 1);
-            expect(shouldBeTrue).toBe(true);
+            });
+            expect(grid.isAreaEmpty(5, 5, 1, 1)).toBe(true);
         });
     });
 
     describe('grid method _packNodes with float', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should allow same x, y coordinates for widgets', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 float: true
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             var $el;
             var $oldEl;
@@ -151,11 +141,9 @@ describe('gridstack', () => {
             }
         });
         it('should not allow same x, y coordinates for widgets', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             var $el;
             var $oldEl;
@@ -173,19 +161,16 @@ describe('gridstack', () => {
 
     describe('grid method addWidget with all parameters', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should allow same x, y coordinates for widgets', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 float: true
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var widgetHTML =
                 '   <div class="grid-stack-item">' +
                 '       <div class="grid-stack-item-content"></div>' +
@@ -207,18 +192,15 @@ describe('gridstack', () => {
 
     describe('grid method addWidget with autoPosition true', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should change x, y coordinates for widgets', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var widgetHTML =
                 '   <div class="grid-stack-item">' +
                 '       <div class="grid-stack-item-content"></div>' +
@@ -232,28 +214,23 @@ describe('gridstack', () => {
 
     describe('grid.destroy', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             //document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should cleanup gridstack', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             grid.destroy();
             expect($('.grid-stack').length).toBe(0);
             expect(grid.grid).toBe(null);
         });
         it('should cleanup gridstack but leave elements', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             grid.destroy(false);
             expect($('.grid-stack').length).toBe(1);
             expect($('.grid-stack-item').length).toBe(2);
@@ -264,18 +241,15 @@ describe('gridstack', () => {
 
     describe('grid.resize', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should resize widget', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid.resize(items[0], 5, 5);
             expect(parseInt($(items[0]).attr('data-gs-width'), 10)).toBe(5);
@@ -285,19 +259,16 @@ describe('gridstack', () => {
 
     describe('grid.move', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should move widget', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 float: true
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid.move(items[0], 5, 5);
             expect(parseInt($(items[0]).attr('data-gs-x'), 10)).toBe(5);
@@ -307,18 +278,15 @@ describe('gridstack', () => {
 
     describe('grid.moveNode', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should do nothing and return node', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid._updateElement(items[0], function(el, node) {
                 var newNode = grid.grid.moveNode(node);
@@ -326,11 +294,9 @@ describe('gridstack', () => {
             });
         });
         it('should do nothing and return node', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid.minWidth(items[0], 1);
             grid.maxWidth(items[0], 2);
@@ -345,19 +311,16 @@ describe('gridstack', () => {
 
     describe('grid.update', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should move and resize widget', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 float: true
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid.update(items[0], 5, 5, 5 ,5);
             expect(parseInt($(items[0]).attr('data-gs-width'), 10)).toBe(5);
@@ -369,27 +332,24 @@ describe('gridstack', () => {
 
     describe('grid.opts.rtl', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should add grid-stack-rtl class', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 rtl: true
-            };
-            $('.grid-stack').gridstack(options);
+            });
             expect($('.grid-stack').hasClass('grid-stack-rtl')).toBe(true);
         });
         it('should not add grid-stack-rtl class', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
+            });
             expect($('.grid-stack').hasClass('grid-stack-rtl')).toBe(false);
         });
     });
@@ -403,14 +363,12 @@ describe('gridstack', () => {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should enable move', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1,
                 disableDrag: true
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             expect(grid.opts.disableDrag).toBe(true);
             grid.enableMove(true, true);
@@ -420,13 +378,11 @@ describe('gridstack', () => {
             expect(grid.opts.disableDrag).toBe(false);
         });
         it('should disable move', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid.enableMove(false);
             for (var i = 0; i < items.length; i++) {
@@ -438,21 +394,18 @@ describe('gridstack', () => {
 
     xdescribe('grid.enableResize', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should enable resize', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1,
                 disableResize: true
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             expect(grid.opts.disableResize).toBe(true);
             grid.enableResize(true, true);
@@ -462,13 +415,11 @@ describe('gridstack', () => {
             expect(grid.opts.disableResize).toBe(false);
         });
         it('should disable resize', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid.enableResize(false);
             for (var i = 0; i < items.length; i++) {
@@ -480,20 +431,17 @@ describe('gridstack', () => {
 
     xdescribe('grid.enable', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should enable movable and resizable', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             grid.enableResize(false);
             grid.enableMove(false);
@@ -511,19 +459,16 @@ describe('gridstack', () => {
 
     describe('grid.enable', () => {
         beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
+            document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
         });
         afterEach(function() {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should lock widgets', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             for (var i = 0; i < items.length; i++) {
                 grid.locked(items[i], true);
@@ -531,12 +476,10 @@ describe('gridstack', () => {
             }
         });
         it('should unlock widgets', () => {
-            var options = {
+            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
+            });
             var items = $('.grid-stack-item');
             for (var i = 0; i < items.length; i++) {
                 grid.locked(items[i], false);
