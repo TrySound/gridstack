@@ -100,38 +100,6 @@ describe('gridstack', function() {
 
     });
 
-    describe('grid.setAnimation', function() {
-        beforeEach(function() {
-            document.body.insertAdjacentHTML(
-                'afterbegin', gridstackHTML);
-        });
-        afterEach(function() {
-            document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
-        });
-        it('should add class grid-stack-animate to the container.', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            $('.grid-stack').removeClass('grid-stack-animate');
-            var grid = $('.grid-stack').data('gridstack');
-            grid.setAnimation(true);
-            expect($('.grid-stack').hasClass('grid-stack-animate')).toBe(true);
-        });
-        it('should remove class grid-stack-animate from the container.', function() {
-            var options = {
-                cellHeight: 80,
-                verticalMargin: 10
-            };
-            $('.grid-stack').gridstack(options);
-            $('.grid-stack').addClass('grid-stack-animate');
-            var grid = $('.grid-stack').data('gridstack');
-            grid.setAnimation(false);
-            expect($('.grid-stack').hasClass('grid-stack-animate')).toBe(false);
-        });
-    });
-
     describe('grid._setStaticClass', function() {
         beforeEach(function() {
             document.body.insertAdjacentHTML(
@@ -521,16 +489,6 @@ describe('gridstack', function() {
                 grid.add_widget(items[i]);
             }
             expect(console.warn).toHaveBeenCalledWith('gridstack.js: Function `add_widget` is deprecated as of v0.2.5 and has been replaced with `addWidget`. It will be **completely** removed in v1.0.');
-        });
-        it('should log a warning if set_animation is called.', function() {
-            console.warn = jasmine.createSpy('log');
-            var options = {
-                cellHeight: 80
-            };
-            $('.grid-stack').gridstack(options);
-            var grid = $('.grid-stack').data('gridstack');
-            grid.set_animation(true);
-            expect(console.warn).toHaveBeenCalledWith('gridstack.js: Function `set_animation` is deprecated as of v0.2.5 and has been replaced with `setAnimation`. It will be **completely** removed in v1.0.');
         });
         it('should log a warning if _prepare_element is called.', function() {
             console.warn = jasmine.createSpy('log');

@@ -567,7 +567,6 @@ var GridStack = function(el, opts) {
         float: false,
         staticGrid: false,
         _class: 'grid-stack-instance-' + (Math.random() * 10000).toFixed(0),
-        animate: Boolean(this.container.attr('data-gs-animate')) || false,
         alwaysShowResizeHandle: opts.alwaysShowResizeHandle || false,
         resizable: _.defaults(opts.resizable || {}, {
             autoHide: !(opts.alwaysShowResizeHandle || false),
@@ -659,8 +658,6 @@ var GridStack = function(el, opts) {
             self._prepareElement(i.el);
         }).value();
     }
-
-    this.setAnimation(this.opts.animate);
 
     this.placeholder = $(
         '<div class="' + this.opts.placeholderClass + ' ' + this.opts.itemClass + '">' +
@@ -1201,14 +1198,6 @@ GridStack.prototype._prepareElement = function(el, triggerAddEvent) {
     this._prepareElementsByNode(el, node);
 };
 
-GridStack.prototype.setAnimation = function(enable) {
-    if (enable) {
-        this.container.addClass('grid-stack-animate');
-    } else {
-        this.container.removeClass('grid-stack-animate');
-    }
-};
-
 GridStack.prototype.addWidget = function(el, x, y, width, height, autoPosition, minWidth, maxWidth,
     minHeight, maxHeight, id) {
     el = $(el);
@@ -1621,8 +1610,6 @@ GridStack.prototype._is_one_column_mode = obsolete(GridStack.prototype._isOneCol
     '_is_one_column_mode','_isOneColumnMode');
 GridStack.prototype._prepare_element = obsolete(GridStack.prototype._prepareElement,
     '_prepare_element', '_prepareElement');
-GridStack.prototype.set_animation = obsolete(GridStack.prototype.setAnimation,
-    'set_animation', 'setAnimation');
 GridStack.prototype.add_widget = obsolete(GridStack.prototype.addWidget,
     'add_widget', 'addWidget');
 GridStack.prototype.make_widget = obsolete(GridStack.prototype.makeWidget,
