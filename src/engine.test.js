@@ -1,21 +1,13 @@
-import '../src/gridstack.js';
+import Engine from './engine.js';
 
 describe('gridstack engine', function() {
     'use strict';
-
-    var e;
-    var w;
-
-    beforeEach(function() {
-        w = window;
-        e = w.GridStackUI.Engine;
-    });
 
     describe('test constructor', function() {
         var engine;
 
         beforeAll(function() {
-            engine = new GridStackUI.Engine(12);
+            engine = new Engine(12);
         });
 
         it('should be setup properly', function() {
@@ -30,7 +22,7 @@ describe('gridstack engine', function() {
         var engine;
 
         beforeAll(function() {
-            engine = new GridStackUI.Engine(12);
+            engine = new Engine(12);
         });
 
         it('should prepare a node', function() {
@@ -55,7 +47,7 @@ describe('gridstack engine', function() {
         var engine;
 
         beforeAll(function() {
-            engine = new GridStackUI.Engine(12, null, true);
+            engine = new Engine(12, null, true);
             engine.nodes = [
                 engine._prepareNode({x: 3, y: 2, width: 3, height: 2})
             ];
@@ -76,7 +68,7 @@ describe('gridstack engine', function() {
         var engine;
 
         beforeAll(function() {
-            engine = new GridStackUI.Engine(12, null, true);
+            engine = new Engine(12, null, true);
             engine.nodes = [
                 engine._prepareNode({x: 0, y: 0, width: 1, height: 1, idx: 1, _dirty: true}),
                 engine._prepareNode({x: 3, y: 2, width: 3, height: 2, idx: 2, _dirty: true}),
@@ -114,7 +106,7 @@ describe('gridstack engine', function() {
         var engine;
 
         beforeAll(function() {
-            engine = new GridStackUI.Engine(12);
+            engine = new Engine(12);
         });
 
         it('should work on not float grids', function() {
@@ -132,7 +124,7 @@ describe('gridstack engine', function() {
         var engine;
 
         beforeAll(function() {
-            engine = new GridStackUI.Engine(12, null, true);
+            engine = new Engine(12, null, true);
         });
 
         it('should work on float grids', function() {
@@ -156,7 +148,7 @@ describe('gridstack engine', function() {
             };
             spyOn(spy, 'callback');
 
-            engine = new GridStackUI.Engine(12, spy.callback, true);
+            engine = new Engine(12, spy.callback, true);
 
             engine.nodes = [
                 engine._prepareNode({x: 0, y: 0, width: 1, height: 1, idx: 1, _dirty: true}),
@@ -215,7 +207,7 @@ describe('gridstack engine', function() {
             };
 
             beforeEach(function() {
-                engine = new GridStackUI.Engine(12, null, false);
+                engine = new Engine(12, null, false);
             });
 
             it('shouldn\'t pack one node with y coord eq 0', function() {
@@ -282,7 +274,7 @@ describe('gridstack engine', function() {
         var engine;
 
         beforeAll(function() {
-            engine = new GridStackUI.Engine(12);
+            engine = new Engine(12);
         });
 
         it('should return true for changed x', function() {
