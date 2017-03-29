@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import '../src/gridstack.js';
+import './gridstack.js';
 
 describe('gridstack', function() {
     'use strict';
