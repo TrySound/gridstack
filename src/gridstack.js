@@ -120,16 +120,24 @@ export default class GridStack {
 
         this._initStyles();
 
-        this.grid = new GridStackEngine(this.opts.width, function(nodes, detachNode) {
+        this.grid = new GridStackEngine(this.opts.width, (nodes, detachNode) => {
             detachNode = typeof detachNode === 'undefined' ? true : detachNode;
             let maxHeight = 0;
-            _.each(nodes, function(n) {
+            _.each(nodes, n => {
                 if (detachNode && n._id === null) {
                     if (n.el) {
                         n.el.remove();
                     }
                 } else {
                     n.el
+                        .css('left', n.x * this.opts.cellWidth)
+                        .css('top', n.y * this.opts.cellHeight)
+                        .css('width', n.width * this.opts.cellWidth)
+                        .css('height', n.height * this.opts.cellHeight)
+                        .css('minWidth', n.minWidth * this.opts.cellWidth)
+                        .css('maxWidth', n.maxWidth * this.opts.cellWidth)
+                        .css('minHeight', n.minHeight * this.opts.cellHeight)
+                        .css('maxHeight', n.maxHeight * this.opts.cellHeight)
                         .attr('data-gs-x', n.x)
                         .attr('data-gs-y', n.y)
                         .attr('data-gs-width', n.width)
@@ -223,22 +231,22 @@ export default class GridStack {
                 });
             }
             this.dd
-                .on(trashZone, 'dropover', function(event, ui) {
-                    const el = $(ui.draggable);
-                    const node = el.data('_gridstack_node');
-                    if (node._grid !== self) {
-                        return;
-                    }
-                    self._setupRemovingTimeout(el);
-                })
-                .on(trashZone, 'dropout', function(event, ui) {
-                    const el = $(ui.draggable);
-                    const node = el.data('_gridstack_node');
-                    if (node._grid !== self) {
-                        return;
-                    }
-                    self._clearRemovingTimeout(el);
-                });
+            .on(trashZone, 'dropover', function(event, ui) {
+                const el = $(ui.draggable);
+                const node = el.data('_gridstack_node');
+                if (node._grid !== self) {
+                    return;
+                }
+                self._setupRemovingTimeout(el);
+            })
+            .on(trashZone, 'dropout', function(event, ui) {
+                const el = $(ui.draggable);
+                const node = el.data('_gridstack_node');
+                if (node._grid !== self) {
+                    return;
+                }
+                self._clearRemovingTimeout(el);
+            });
         }
 
         if (self.opts.acceptWidgets) {
@@ -262,6 +270,10 @@ export default class GridStack {
 
                     self.container.append(self.placeholder);
                     self.placeholder
+                        .css('left', node.x * this.opts.cellWidth)
+                        .css('top', node.y * this.opts.cellHeight)
+                        .css('width', node.width * this.opts.cellWidth)
+                        .css('height', node.height * this.opts.cellHeight)
                         .attr('data-gs-x', node.x)
                         .attr('data-gs-y', node.y)
                         .attr('data-gs-width', node.width)
@@ -318,7 +330,7 @@ export default class GridStack {
                 self._updateContainerHeight();
                 el.data('_gridstack_node', el.data('_gridstack_node_orig'));
             })
-            .on(self.container, 'drop', function(event, ui) {
+            .on(self.container, 'drop', (event, ui) => {
                 self.placeholder.detach();
 
                 const node = $(ui.draggable).data('_gridstack_node');
@@ -329,12 +341,15 @@ export default class GridStack {
                 node.el = el;
                 self.placeholder.hide();
                 el
+                    .css('left', node.x * this.opts.cellWidth)
+                    .css('top', node.y * this.opts.cellHeight)
+                    .css('width', node.width * this.opts.cellWidth)
+                    .css('height', node.height * this.opts.cellHeight)
                     .attr('data-gs-x', node.x)
                     .attr('data-gs-y', node.y)
                     .attr('data-gs-width', node.width)
                     .attr('data-gs-height', node.height)
                     .addClass(self.opts.itemClass)
-                    .removeAttr('style')
                     .enableSelection()
                     .removeData('draggable')
                     .removeClass('ui-draggable ui-draggable-dragging ui-draggable-disabled')
@@ -495,7 +510,7 @@ export default class GridStack {
         let cellWidth;
         let cellHeight;
 
-        const dragOrResize = function(event, ui) {
+        const dragOrResize = (event, ui) => {
             let x = Math.round(ui.position.left / cellWidth);
             let y = Math.floor((ui.position.top + cellHeight / 2) / cellHeight);
             let width;
@@ -527,6 +542,10 @@ export default class GridStack {
                     if (node._temporaryRemoved) {
                         self.grid.addNode(node);
                         self.placeholder
+                            .css('left', x * this.opts.cellWidth)
+                            .css('top', y * this.opts.cellHeight)
+                            .css('width', width * this.opts.cellWidth)
+                            .css('height', height * this.opts.cellHeight)
                             .attr('data-gs-x', x)
                             .attr('data-gs-y', y)
                             .attr('data-gs-width', width)
@@ -567,6 +586,10 @@ export default class GridStack {
             const strictCellHeight = Math.ceil(o.outerHeight() / o.attr('data-gs-height'));
             cellHeight = self.container.height() / parseInt(self.container.attr('data-gs-current-height'));
             self.placeholder
+                .css('left', parseInt(o.attr('data-gs-x'), 10) * self.opts.cellWidth + 'px')
+                .css('top', parseInt(o.attr('data-gs-y'), 10) * self.opts.cellHeight + 'px')
+                .css('width', parseInt(o.attr('data-gs-width'), 10) * self.opts.cellWidth + 'px')
+                .css('height', parseInt(o.attr('data-gs-height'), 10) * self.opts.cellHeight + 'px')
                 .attr('data-gs-x', o.attr('data-gs-x'))
                 .attr('data-gs-y', o.attr('data-gs-y'))
                 .attr('data-gs-width', o.attr('data-gs-width'))
@@ -603,18 +626,24 @@ export default class GridStack {
                 self._clearRemovingTimeout(el);
                 if (!node._temporaryRemoved) {
                     o
+                        .css('left', node.x * self.opts.cellWidth)
+                        .css('top', node.y * self.opts.cellHeight)
+                        .css('width', node.width * self.opts.cellWidth)
+                        .css('height', node.height * self.opts.cellHeight)
                         .attr('data-gs-x', node.x)
                         .attr('data-gs-y', node.y)
                         .attr('data-gs-width', node.width)
-                        .attr('data-gs-height', node.height)
-                        .removeAttr('style');
+                        .attr('data-gs-height', node.height);
                 } else {
                     o
+                        .css('left', node._beforeDragX * self.opts.cellWidth)
+                        .css('top', node._beforeDragY * self.opts.cellHeight)
+                        .css('width', node.width * self.opts.cellWidth)
+                        .css('height', node.height * self.opts.cellHeight)
                         .attr('data-gs-x', node._beforeDragX)
                         .attr('data-gs-y', node._beforeDragY)
                         .attr('data-gs-width', node.width)
-                        .attr('data-gs-height', node.height)
-                        .removeAttr('style');
+                        .attr('data-gs-height', node.height);
                     node.x = node._beforeDragX;
                     node.y = node._beforeDragY;
                     self.grid.addNode(node);
@@ -857,7 +886,7 @@ export default class GridStack {
 
             if (!isNaN(val)) {
                 node.maxHeight = (val || false);
-                el.attr('data-gs-max-height', val);
+                el.attr('data-gs-max-height', val).css('maxHeight', val * this.opts.cellHeight);
             }
         });
         return this;
@@ -874,7 +903,7 @@ export default class GridStack {
 
             if (!isNaN(val)) {
                 node.minHeight = (val || false);
-                el.attr('data-gs-min-height', val);
+                el.attr('data-gs-min-height', val).css('minHeight', val * this.opts.cellHeight);
             }
         });
         return this;
@@ -882,7 +911,7 @@ export default class GridStack {
 
     maxWidth(el, val) {
         el = $(el);
-        el.each(function(index, el) {
+        el.each((index, el) => {
             el = $(el);
             const node = el.data('_gridstack_node');
             if (typeof node === 'undefined' || node === null) {
@@ -891,7 +920,7 @@ export default class GridStack {
 
             if (!isNaN(val)) {
                 node.maxWidth = (val || false);
-                el.attr('data-gs-max-width', val);
+                el.attr('data-gs-max-width', val).css('maxWidth', val * this.opts.cellWidth);
             }
         });
         return this;
@@ -899,7 +928,7 @@ export default class GridStack {
 
     minWidth(el, val) {
         el = $(el);
-        el.each(function(index, el) {
+        el.each((index, el) => {
             el = $(el);
             const node = el.data('_gridstack_node');
             if (typeof node === 'undefined' || node === null) {
@@ -908,7 +937,7 @@ export default class GridStack {
 
             if (!isNaN(val)) {
                 node.minWidth = (val || false);
-                el.attr('data-gs-min-width', val);
+                el.attr('data-gs-min-width', val).css('minWidth', val * this.opts.cellWidth);
             }
         });
         return this;

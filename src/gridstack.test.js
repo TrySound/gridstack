@@ -25,6 +25,7 @@ describe('gridstack', () => {
 
     it('getCellFromPixel method computes cell in empty grid', () => {
         const grid = new window.GridStackUI(document.createElement('div'), {
+            cellWidth: 60,
             cellHeight: 80
         });
         const cell = grid.getCellFromPixel({ left: 72, top: 100 });
@@ -105,6 +106,7 @@ describe('gridstack', () => {
         });
     });
 
+    // TODO engine test
     describe('grid method _packNodes with float', () => {
         beforeEach(function() {
             document.body.insertAdjacentHTML('afterbegin', gridstackHTML);
@@ -147,6 +149,7 @@ describe('gridstack', () => {
 
     it('addWidget method with all parameters', () => {
         const grid = new window.GridStackUI(document.createElement('div'), {
+            cellWidth: 40,
             cellHeight: 80,
             float: true
         });
@@ -175,10 +178,22 @@ describe('gridstack', () => {
             maxHeight: '5',
             id: 'coolWidget'
         });
+        expect({
+            x: cell.style.left,
+            y: cell.style.top,
+            width: cell.style.width,
+            height: cell.style.height
+        }).toEqual({
+            x: 6 * 40 + 'px',
+            y: 7 * 80 + 'px',
+            width: 2 * 40 + 'px',
+            height: 3 * 80 + 'px'
+        });
     });
 
     it('addWidget sets attributes with inferred params if autoPosition is true', () => {
         const grid = new window.GridStackUI(document.createElement('div'), {
+            cellWidth: 40,
             cellHeight: 80
         });
         grid.addWidget(document.createElement('div'), 0, 0, 4, 2);
@@ -191,6 +206,13 @@ describe('gridstack', () => {
         }).toEqual({
             x: '8',
             y: '0'
+        });
+        expect({
+            x: cell.style.left,
+            y: cell.style.top
+        }).toEqual({
+            x: 8 * 40 + 'px',
+            y: 80 * 0 + 'px'
         });
     });
 
@@ -233,6 +255,13 @@ describe('gridstack', () => {
             width: '5',
             height: '10'
         });
+        expect({
+            width: cell.style.width,
+            height: cell.style.height
+        }).toEqual({
+            width: 5 * 60 + 'px',
+            height: 10 * 60 + 'px'
+        });
     });
 
     it('move method sets x and y attributes', () => {
@@ -249,6 +278,13 @@ describe('gridstack', () => {
         }).toEqual({
             x: '5',
             y: '10'
+        });
+        expect({
+            x: cell.style.left,
+            y: cell.style.top
+        }).toEqual({
+            x: 5 * 60 + 'px',
+            y: 10 * 80 + 'px'
         });
     });
 
@@ -303,6 +339,17 @@ describe('gridstack', () => {
             y: '6',
             width: '7',
             height: '8'
+        });
+        expect({
+            x: cell.style.left,
+            y: cell.style.top,
+            width: cell.style.width,
+            height: cell.style.height
+        }).toEqual({
+            x: 5 * 60 + 'px',
+            y: 6 * 60 + 'px',
+            width: 7 * 60 + 'px',
+            height: 8 * 60 + 'px'
         });
     });
 
