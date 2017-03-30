@@ -877,7 +877,7 @@ export default class GridStack {
 
     maxHeight(el, val) {
         el = $(el);
-        el.each(function(index, el) {
+        el.each((index, el) => {
             el = $(el);
             const node = el.data('_gridstack_node');
             if (typeof node === 'undefined' || node === null) {
@@ -894,7 +894,7 @@ export default class GridStack {
 
     minHeight(el, val) {
         el = $(el);
-        el.each(function(index, el) {
+        el.each((index, el) => {
             el = $(el);
             const node = el.data('_gridstack_node');
             if (typeof node === 'undefined' || node === null) {
