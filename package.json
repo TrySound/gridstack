@@ -1,6 +1,6 @@
 {
   "name": "@trysound/gridstack",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "gridstack is a jQuery plugin for widget layout",
   "main": "dist/gridstack.js",
   "files": [
