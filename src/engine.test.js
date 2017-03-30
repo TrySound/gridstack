@@ -1,10 +1,11 @@
+/* eslint-env jasmine */
 import Engine from './engine.js';
 
 describe('gridstack engine', function() {
     'use strict';
 
     describe('test constructor', function() {
-        var engine;
+        let engine;
 
         beforeAll(function() {
             engine = new Engine(12);
@@ -19,7 +20,7 @@ describe('gridstack engine', function() {
     });
 
     describe('test _prepareNode', function() {
-        var engine;
+        let engine;
 
         beforeAll(function() {
             engine = new Engine(12);
@@ -44,7 +45,7 @@ describe('gridstack engine', function() {
     });
 
     describe('test isAreaEmpty', function() {
-        var engine;
+        let engine;
 
         beforeAll(function() {
             engine = new Engine(12, null, true);
@@ -65,7 +66,7 @@ describe('gridstack engine', function() {
     });
 
     describe('test cleanNodes/getDirtyNodes', function() {
-        var engine;
+        let engine;
 
         beforeAll(function() {
             engine = new Engine(12, null, true);
@@ -81,7 +82,7 @@ describe('gridstack engine', function() {
         });
 
         it('should return all dirty nodes', function() {
-            var nodes = engine.getDirtyNodes();
+            const nodes = engine.getDirtyNodes();
 
             expect(nodes.length).toEqual(2);
             expect(nodes[0].idx).toEqual(1);
@@ -103,7 +104,7 @@ describe('gridstack engine', function() {
     });
 
     describe('test batchUpdate/commit', function() {
-        var engine;
+        let engine;
 
         beforeAll(function() {
             engine = new Engine(12);
@@ -121,7 +122,7 @@ describe('gridstack engine', function() {
     });
 
     describe('test batchUpdate/commit', function() {
-        var engine;
+        let engine;
 
         beforeAll(function() {
             engine = new Engine(12, null, true);
@@ -139,12 +140,12 @@ describe('gridstack engine', function() {
     });
 
     describe('test _notify', function() {
-        var engine;
-        var spy;
+        let engine;
+        let spy;
 
         beforeEach(function() {
             spy = {
-                callback: function() {}
+                callback() {}
             };
             spyOn(spy, 'callback');
 
@@ -174,7 +175,7 @@ describe('gridstack engine', function() {
         });
 
         it('should by called with extra passed node to be removed', function() {
-            var n1 = {idx: -1};
+            const n1 = {idx: -1};
 
             engine._notify(n1);
 
@@ -186,7 +187,7 @@ describe('gridstack engine', function() {
         });
 
         it('should by called with extra passed node to be removed and should maintain false parameter', function() {
-            var n1 = {idx: -1};
+            const n1 = {idx: -1};
 
             engine._notify(n1, false);
 
@@ -200,9 +201,9 @@ describe('gridstack engine', function() {
 
     describe('test _packNodes', function() {
         describe('using not float mode', function() {
-            var engine;
+            let engine;
 
-            var findNode = function(engine, id) {
+            const findNode = function(engine, id) {
                 return engine.nodes.find(i => i._id === id);
             };
 
@@ -271,34 +272,34 @@ describe('gridstack engine', function() {
     });
 
     describe('test isNodeChangedPosition', function() {
-        var engine;
+        let engine;
 
         beforeAll(function() {
             engine = new Engine(12);
         });
 
         it('should return true for changed x', function() {
-            var widget = { x: 1, y: 2, width: 3, height: 4 };
+            const widget = { x: 1, y: 2, width: 3, height: 4 };
             expect(engine.isNodeChangedPosition(widget, 2, 2)).toEqual(true);
         });
 
         it('should return true for changed y', function() {
-            var widget = { x: 1, y: 2, width: 3, height: 4 };
+            const widget = { x: 1, y: 2, width: 3, height: 4 };
             expect(engine.isNodeChangedPosition(widget, 1, 1)).toEqual(true);
         });
 
         it('should return true for changed width', function() {
-            var widget = { x: 1, y: 2, width: 3, height: 4 };
+            const widget = { x: 1, y: 2, width: 3, height: 4 };
             expect(engine.isNodeChangedPosition(widget, 2, 2, 4, 4)).toEqual(true);
         });
 
         it('should return true for changed height', function() {
-            var widget = { x: 1, y: 2, width: 3, height: 4 };
+            const widget = { x: 1, y: 2, width: 3, height: 4 };
             expect(engine.isNodeChangedPosition(widget, 1, 2, 3, 3)).toEqual(true);
         });
 
         it('should return false for unchanged position', function() {
-            var widget = { x: 1, y: 2, width: 3, height: 4 };
+            const widget = { x: 1, y: 2, width: 3, height: 4 };
             expect(engine.isNodeChangedPosition(widget, 1, 2, 3, 4)).toEqual(false);
         });
     });

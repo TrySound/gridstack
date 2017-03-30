@@ -2,7 +2,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 import * as Utils from './utils.js';
 
-var idSeq = 0;
+let idSeq = 0;
 
 export default class GridStackEngine {
     constructor(width, onchange, floatMode, height, items) {
@@ -40,17 +40,16 @@ export default class GridStackEngine {
     }
 
     _fixCollisions(node) {
-        var self = this;
         this._sortNodes(-1);
 
-        var nn = node;
-        var hasLocked = Boolean(_.find(this.nodes, function(n) { return n.locked; }));
+        let nn = node;
+        const hasLocked = Boolean(_.find(this.nodes, function(n) { return n.locked; }));
         if (!this.float && !hasLocked) {
             nn = {x: 0, y: node.y, width: this.width, height: node.height};
         }
         while (true) {
-            var collisionNode = this.nodes.find(n => Utils._collisionNodeCheck(node, nn, n));
-            if (typeof collisionNode == 'undefined') {
+            const collisionNode = this.nodes.find(n => Utils._collisionNodeCheck(node, nn, n));
+            if (typeof collisionNode === 'undefined') {
                 return;
             }
             this.moveNode(collisionNode, collisionNode.x, node.y + node.height,
@@ -59,8 +58,8 @@ export default class GridStackEngine {
     }
 
     isAreaEmpty(x, y, width, height) {
-        var nn = {x: x || 0, y: y || 0, width: width || 1, height: height || 1};
-        var collisionNode = _.find(this.nodes, _.bind(function(n) {
+        const nn = {x: x || 0, y: y || 0, width: width || 1, height: height || 1};
+        const collisionNode = _.find(this.nodes, _.bind(function(n) {
             return Utils.isIntercepted(n, nn);
         }, this));
         return collisionNode === null || typeof collisionNode === 'undefined';
@@ -74,14 +73,14 @@ export default class GridStackEngine {
         this._sortNodes();
 
         if (this.float) {
-            _.each(this.nodes, _.bind(function(n, i) {
-                if (n._updating || typeof n._origY == 'undefined' || n.y == n._origY) {
+            _.each(this.nodes, _.bind(function(n) {
+                if (n._updating || typeof n._origY === 'undefined' || n.y === n._origY) {
                     return;
                 }
 
-                var newY = n.y;
+                let newY = n.y;
                 while (newY >= n._origY) {
-                    var collisionNode = _.chain(this.nodes)
+                    const collisionNode = _.chain(this.nodes)
                         .find(node => Utils._didCollide(n, newY, node))
                         .value();
 
@@ -98,21 +97,21 @@ export default class GridStackEngine {
                     return;
                 }
                 while (n.y > 0) {
-                    var newY = n.y - 1;
-                    var canBeMoved = i === 0;
+                    const newY = n.y - 1;
+                    let canBeMoved = i === 0;
 
                     if (i > 0) {
-                        var collisionNode = _.chain(this.nodes)
+                        const collisionNode = _.chain(this.nodes)
                             .take(i)
                             .find(node => Utils._didCollide(n, newY, node))
                             .value();
-                        canBeMoved = typeof collisionNode == 'undefined';
+                        canBeMoved = typeof collisionNode === 'undefined';
                     }
 
                     if (!canBeMoved) {
                         break;
                     }
-                    n._dirty = n.y != newY;
+                    n._dirty = n.y !== newY;
                     n.y = newY;
                 }
             }, this));
@@ -160,13 +159,13 @@ export default class GridStackEngine {
     }
 
     _notify() {
-        var args = Array.prototype.slice.call(arguments, 0);
+        const args = Array.prototype.slice.call(arguments, 0);
         args[0] = typeof args[0] === 'undefined' ? [] : [args[0]];
         args[1] = typeof args[1] === 'undefined' ? true : args[1];
         if (this._updateCounter) {
             return;
         }
-        var deletedNodes = args[0].concat(this.getDirtyNodes());
+        const deletedNodes = args[0].concat(this.getDirtyNodes());
         this.onchange(deletedNodes, args[1]);
     }
 
@@ -184,10 +183,10 @@ export default class GridStackEngine {
     addNode(node, triggerAddEvent) {
         node = this._prepareNode(node);
 
-        if (typeof node.maxWidth != 'undefined') { node.width = Math.min(node.width, node.maxWidth); }
-        if (typeof node.maxHeight != 'undefined') { node.height = Math.min(node.height, node.maxHeight); }
-        if (typeof node.minWidth != 'undefined') { node.width = Math.max(node.width, node.minWidth); }
-        if (typeof node.minHeight != 'undefined') { node.height = Math.max(node.height, node.minHeight); }
+        if (typeof node.maxWidth !== 'undefined') { node.width = Math.min(node.width, node.maxWidth); }
+        if (typeof node.maxHeight !== 'undefined') { node.height = Math.min(node.height, node.maxHeight); }
+        if (typeof node.minWidth !== 'undefined') { node.width = Math.max(node.width, node.minWidth); }
+        if (typeof node.minHeight !== 'undefined') { node.height = Math.max(node.height, node.minHeight); }
 
         node._id = ++idSeq;
         node._dirty = true;
@@ -195,9 +194,9 @@ export default class GridStackEngine {
         if (node.autoPosition) {
             this._sortNodes();
 
-            for (var i = 0;; ++i) {
-                var x = i % this.width;
-                var y = Math.floor(i / this.width);
+            for (let i = 0;; ++i) {
+                const x = i % this.width;
+                const y = Math.floor(i / this.width);
                 if (x + node.width > this.width) {
                     continue;
                 }
@@ -210,7 +209,7 @@ export default class GridStackEngine {
         }
 
         this.nodes.push(node);
-        if (typeof triggerAddEvent != 'undefined' && triggerAddEvent) {
+        if (typeof triggerAddEvent !== 'undefined' && triggerAddEvent) {
             this._addedNodes.push(_.clone(node));
         }
 
@@ -233,20 +232,20 @@ export default class GridStackEngine {
         if (!this.isNodeChangedPosition(node, x, y, width, height)) {
             return false;
         }
-        var hasLocked = Boolean(_.find(this.nodes, function(n) { return n.locked; }));
+        const hasLocked = Boolean(_.find(this.nodes, function(n) { return n.locked; }));
 
         if (!this.height && !hasLocked) {
             return true;
         }
 
-        var clonedNode;
-        var clone = new GridStackEngine(
+        let clonedNode;
+        const clone = new GridStackEngine(
             this.width,
             null,
             this.float,
             0,
             _.map(this.nodes, function(n) {
-                if (n == node) {
+                if (n === node) {
                     clonedNode = $.extend({}, n);
                     return clonedNode;
                 }
@@ -259,11 +258,11 @@ export default class GridStackEngine {
 
         clone.moveNode(clonedNode, x, y, width, height);
 
-        var res = true;
+        let res = true;
 
         if (hasLocked) {
             res &= !Boolean(_.find(clone.nodes, function(n) {
-                return n != clonedNode && Boolean(n.locked) && Boolean(n._dirty);
+                return n !== clonedNode && Boolean(n.locked) && Boolean(n._dirty);
             }));
         }
         if (this.height) {
@@ -278,7 +277,7 @@ export default class GridStackEngine {
             return true;
         }
 
-        var clone = new GridStackEngine(
+        const clone = new GridStackEngine(
             this.width,
             null,
             this.float,
@@ -289,17 +288,17 @@ export default class GridStackEngine {
     }
 
     isNodeChangedPosition(node, x, y, width, height) {
-        if (typeof x != 'number') { x = node.x; }
-        if (typeof y != 'number') { y = node.y; }
-        if (typeof width != 'number') { width = node.width; }
-        if (typeof height != 'number') { height = node.height; }
+        if (typeof x !== 'number') { x = node.x; }
+        if (typeof y !== 'number') { y = node.y; }
+        if (typeof width !== 'number') { width = node.width; }
+        if (typeof height !== 'number') { height = node.height; }
 
-        if (typeof node.maxWidth != 'undefined') { width = Math.min(width, node.maxWidth); }
-        if (typeof node.maxHeight != 'undefined') { height = Math.min(height, node.maxHeight); }
-        if (typeof node.minWidth != 'undefined') { width = Math.max(width, node.minWidth); }
-        if (typeof node.minHeight != 'undefined') { height = Math.max(height, node.minHeight); }
+        if (typeof node.maxWidth !== 'undefined') { width = Math.min(width, node.maxWidth); }
+        if (typeof node.maxHeight !== 'undefined') { height = Math.min(height, node.maxHeight); }
+        if (typeof node.minWidth !== 'undefined') { width = Math.max(width, node.minWidth); }
+        if (typeof node.minHeight !== 'undefined') { height = Math.max(height, node.minHeight); }
 
-        if (node.x == x && node.y == y && node.width == width && node.height == height) {
+        if (node.x === x && node.y === y && node.width === width && node.height === height) {
             return false;
         }
         return true;
@@ -309,21 +308,21 @@ export default class GridStackEngine {
         if (!this.isNodeChangedPosition(node, x, y, width, height)) {
             return node;
         }
-        if (typeof x != 'number') { x = node.x; }
-        if (typeof y != 'number') { y = node.y; }
-        if (typeof width != 'number') { width = node.width; }
-        if (typeof height != 'number') { height = node.height; }
+        if (typeof x !== 'number') { x = node.x; }
+        if (typeof y !== 'number') { y = node.y; }
+        if (typeof width !== 'number') { width = node.width; }
+        if (typeof height !== 'number') { height = node.height; }
 
-        if (typeof node.maxWidth != 'undefined') { width = Math.min(width, node.maxWidth); }
-        if (typeof node.maxHeight != 'undefined') { height = Math.min(height, node.maxHeight); }
-        if (typeof node.minWidth != 'undefined') { width = Math.max(width, node.minWidth); }
-        if (typeof node.minHeight != 'undefined') { height = Math.max(height, node.minHeight); }
+        if (typeof node.maxWidth !== 'undefined') { width = Math.min(width, node.maxWidth); }
+        if (typeof node.maxHeight !== 'undefined') { height = Math.min(height, node.maxHeight); }
+        if (typeof node.minWidth !== 'undefined') { width = Math.max(width, node.minWidth); }
+        if (typeof node.minHeight !== 'undefined') { height = Math.max(height, node.minHeight); }
 
-        if (node.x == x && node.y == y && node.width == width && node.height == height) {
+        if (node.x === x && node.y === y && node.width === width && node.height === height) {
             return node;
         }
 
-        var resizing = node.width != width;
+        const resizing = node.width !== width;
         node._dirty = true;
 
         node.x = x;

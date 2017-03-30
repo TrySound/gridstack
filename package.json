@@ -13,7 +13,8 @@
   "scripts": {
     "build": "grunt && webpack",
     "prepublish": "yarn run build",
-    "test": "cross-env BABEL_ENV=test jest --coverage"
+    "test": "cross-env BABEL_ENV=test jest --coverage",
+    "posttest": "eslint src"
   },
   "jest": {
     "coverageReporters": [
@@ -53,6 +54,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
     "cross-env": "^3.2.4",
     "doctoc": "^1.0.0",
+    "eslint": "^3.18.0",
     "grunt": "^0.4.5",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-cssmin": "^0.14.0",

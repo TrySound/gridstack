@@ -1,3 +1,4 @@
+/* eslint-env jasmine */
 import $ from 'jquery';
 import * as utils from './utils.js';
 
@@ -26,7 +27,7 @@ describe('gridstack utils', function() {
     });
 
     describe('test isIntercepted', function() {
-        var src = {x: 3, y: 2, width: 3, height: 2};
+        const src = {x: 3, y: 2, width: 3, height: 2};
 
         it('should intercept', function() {
             expect(utils.isIntercepted(src, {x: 0, y: 0, width: 4, height: 3})).toEqual(true);
@@ -47,20 +48,18 @@ describe('gridstack utils', function() {
     describe('test createStylesheet/removeStylesheet', function() {
 
         it('should create/remove style DOM', function() {
-            var _id = 'test-123';
+            const _id = 'test-123';
 
             utils.createStylesheet(_id);
 
-            var style = $('STYLE[data-gs-style-id=' + _id + ']');
+            const style = $('STYLE[data-gs-style-id=' + _id + ']');
 
             expect(style.length).toEqual(1);
             expect(style.prop('tagName')).toEqual('STYLE');
 
-            utils.removeStylesheet(_id)
+            utils.removeStylesheet(_id);
 
-            style = $('STYLE[data-gs-style-id=' + _id + ']');
-
-            expect(style.length).toEqual(0);
+            expect($('STYLE[data-gs-style-id=' + _id + ']').length).toEqual(0);
         });
 
     });

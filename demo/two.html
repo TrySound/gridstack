@@ -103,10 +103,14 @@
             removeTimeout: 100,
             acceptWidgets: '.grid-stack-item'
         };
-        $('#grid1').gridstack(options);
-        $('#grid2').gridstack(_.defaults({
-            float: true
-        }, options));
+        $('#grid1').each((index, element) => {
+            $(element).data('gridstack', new window.GridStackUI(element, options));
+        });
+        $('#grid2').each((index, element) => {
+            $(element).data('gridstack', new window.GridStackUI(element, _.defaults({
+                float: true
+            }, options)));
+        });
 
         var items = [
             {x: 0, y: 0, width: 2, height: 2},

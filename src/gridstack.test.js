@@ -1,3 +1,4 @@
+/* eslint-env jasmine */
 import $ from 'jquery';
 import './gridstack.js';
 
@@ -25,7 +26,7 @@ describe('gridstack', () => {
     it('getCellFromPixel method computes cell in empty grid', () => {
         const grid = new window.GridStackUI(document.createElement('div'), {
             cellHeight: 80
-        })
+        });
         const cell = grid.getCellFromPixel({ left: 72, top: 100 });
         expect(cell).toEqual({ x: 1, y: 1 });
     });
@@ -112,14 +113,14 @@ describe('gridstack', () => {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should allow same x, y coordinates for widgets', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 float: true
             });
-            var items = $('.grid-stack-item');
-            var $el;
-            var $oldEl;
-            for (var i = 0; i < items.length; i++) {
+            const items = $('.grid-stack-item');
+            let $el;
+            let $oldEl;
+            for (let i = 0; i < items.length; i++) {
                 $el = $(grid.addWidget(items[i]));
                 $oldEl = $(items[i]);
                 expect($oldEl.attr('data-gs-x')).toBe($el.attr('data-gs-x'));
@@ -127,15 +128,14 @@ describe('gridstack', () => {
             }
         });
         it('should not allow same x, y coordinates for widgets', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
             });
-            var items = $('.grid-stack-item');
-            var $el;
-            var $oldEl;
-            var newY;
-            var oldY;
-            for (var i = 0; i < items.length; i++) {
+            const items = $('.grid-stack-item');
+            let $el;
+            let $oldEl;
+            let newY;
+            for (let i = 0; i < items.length; i++) {
                 $oldEl = $.extend(true, {}, $(items[i]));
                 newY = parseInt($oldEl.attr('data-gs-y'), 10) + 5;
                 $oldEl.attr('data-gs-y', newY);
@@ -184,7 +184,7 @@ describe('gridstack', () => {
         grid.addWidget(document.createElement('div'), 0, 0, 4, 2);
         grid.addWidget(document.createElement('div'), 4, 0, 4, 4);
         const cell = document.createElement('div');
-        const widget = grid.addWidget(cell, 9, 7, 2, 3, true);
+        grid.addWidget(cell, 9, 7, 2, 3, true);
         expect({
             x: cell.getAttribute('data-gs-x'),
             y: cell.getAttribute('data-gs-y')
@@ -202,7 +202,7 @@ describe('gridstack', () => {
             //document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should cleanup gridstack', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
             });
             grid.destroy();
@@ -210,7 +210,7 @@ describe('gridstack', () => {
             expect(grid.grid).toBe(null);
         });
         it('should cleanup gridstack but leave elements', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
             });
             grid.destroy(false);
@@ -261,26 +261,26 @@ describe('gridstack', () => {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should do nothing and return node', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
             });
-            var items = $('.grid-stack-item');
+            const items = $('.grid-stack-item');
             grid._updateElement(items[0], function(el, node) {
-                var newNode = grid.grid.moveNode(node);
+                const newNode = grid.grid.moveNode(node);
                 expect(newNode).toBe(node);
             });
         });
         it('should do nothing and return node', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80
             });
-            var items = $('.grid-stack-item');
+            const items = $('.grid-stack-item');
             grid.minWidth(items[0], 1);
             grid.maxWidth(items[0], 2);
             grid.minHeight(items[0], 1);
             grid.maxHeight(items[0], 2);
             grid._updateElement(items[0], function(el, node) {
-                var newNode = grid.grid.moveNode(node);
+                const newNode = grid.grid.moveNode(node);
                 expect(newNode).toBe(node);
             });
         });
@@ -308,7 +308,7 @@ describe('gridstack', () => {
 
     it('rtl option adds grid-stack-rtl class', () => {
         const container = document.createElement('div');
-        const grid = new window.GridStackUI(container, {
+        new window.GridStackUI(container, {
             rtl: true
         });
         expect(container.classList.contains('grid-stack-rtl')).toEqual(true);
@@ -323,29 +323,29 @@ describe('gridstack', () => {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should enable move', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1,
                 disableDrag: true
             });
-            var items = $('.grid-stack-item');
+            const items = $('.grid-stack-item');
             expect(grid.opts.disableDrag).toBe(true);
             grid.enableMove(true, true);
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 expect($(items[i]).hasClass('ui-draggable-handle')).toBe(true);
             }
             expect(grid.opts.disableDrag).toBe(false);
         });
         it('should disable move', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1
             });
-            var items = $('.grid-stack-item');
+            const items = $('.grid-stack-item');
             grid.enableMove(false);
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 expect($(items[i]).hasClass('ui-draggable-handle')).toBe(false);
             }
             expect(grid.opts.disableDrag).toBe(false);
@@ -360,29 +360,29 @@ describe('gridstack', () => {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should enable resize', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1,
                 disableResize: true
             });
-            var items = $('.grid-stack-item');
+            const items = $('.grid-stack-item');
             expect(grid.opts.disableResize).toBe(true);
             grid.enableResize(true, true);
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 expect(($(items[i]).resizable('option','disabled'))).toBe(false);
             }
             expect(grid.opts.disableResize).toBe(false);
         });
         it('should disable resize', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1
             });
-            var items = $('.grid-stack-item');
+            const items = $('.grid-stack-item');
             grid.enableResize(false);
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 expect(($(items[i]).resizable('option','disabled'))).toBe(true);
             }
             expect(grid.opts.disableResize).toBe(false);
@@ -397,20 +397,20 @@ describe('gridstack', () => {
             document.body.removeChild(document.getElementsByClassName('grid-stack')[0]);
         });
         it('should enable movable and resizable', () => {
-            var grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
+            const grid = new window.GridStackUI(document.querySelector('.grid-stack'), {
                 cellHeight: 80,
                 verticalMargin: 10,
                 minWidth: 1
             });
-            var items = $('.grid-stack-item');
+            const items = $('.grid-stack-item');
             grid.enableResize(false);
             grid.enableMove(false);
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 expect($(items[i]).hasClass('ui-draggable-handle')).toBe(false);
                 expect(($(items[i]).resizable('option','disabled'))).toBe(true);
             }
             grid.enable();
-            for (var j = 0; j < items.length; j++) {
+            for (let j = 0; j < items.length; j++) {
                 expect($(items[j]).hasClass('ui-draggable-handle')).toBe(true);
                 expect(($(items[j]).resizable('option','disabled'))).toBe(false);
             }
