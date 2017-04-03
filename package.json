@@ -1,0 +1,58 @@
+{
+  "name": "@trysound/gridstack",
+  "version": "0.6.0",
+  "description": "packable layout library",
+  "main": "dist/gridstack.js",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrySound/gridstack.git"
+  },
+  "scripts": {
+    "build": "webpack",
+    "prepublish": "yarn run build",
+    "start": "webpack-dev-server --open",
+    "test": "cross-env BABEL_ENV=test jest --coverage",
+    "posttest": "eslint src"
+  },
+  "jest": {
+    "coverageReporters": [
+      "text-summary",
+      "html"
+    ]
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "transform-es2015-modules-commonjs"
+        ]
+      }
+    }
+  },
+  "keywords": [
+    "gridstack",
+    "grid",
+    "gridster",
+    "layout",
+    "pack"
+  ],
+  "author": "Bogdan Chadkin <trysound@yandex.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TrySound/gridstack/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-jest": "^19.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
+    "cross-env": "^3.2.4",
+    "eslint": "^3.18.0",
+    "html-webpack-plugin": "^2.28.0",
+    "jest": "^19.0.2",
+    "webpack": "^2.3.2",
+    "webpack-dev-server": "^2.4.2"
+  }
+}
