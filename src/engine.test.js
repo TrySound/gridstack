@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { packNodes, addNode, removeNode, updateNode } from './engine.js';
+import { packNodes/*, addNode, removeNode, updateNode*/ } from './engine.js';
 
 test('normalize node', () => {
     expect(

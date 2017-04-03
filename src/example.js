@@ -37,7 +37,7 @@ const updateNode = node => {
         if (element.dataset.id === String(node.id)) {
             applyNode(element, node);
         }
-    })
+    });
 };
 
 const addNode = node => {
@@ -84,7 +84,7 @@ const addNode = node => {
             state.forEach(updateNode);
         };
 
-        const onMouseUp = e => {
+        const onMouseUp = () => {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };

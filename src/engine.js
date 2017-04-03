@@ -90,7 +90,7 @@ export const packNodes = ({
     }
     return resolvedNodes;
 };
-
+/*
 export const addNode = ({
     hoist = false,
     maxWidth = Infinity,
@@ -118,3 +118,4 @@ export const removeNode = ({
 }) => {
     return nodes;
 };
+*/
