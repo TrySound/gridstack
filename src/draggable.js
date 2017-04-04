@@ -1,4 +1,4 @@
-const checkResize = (rect, e, offset = 6) => {
+const checkResize = (rect, e, offset = 12) => {
     const top = Math.abs(rect.top - e.clientY) <= offset;
     const right = Math.abs(rect.left + rect.width - e.clientX) <= offset;
     const bottom = Math.abs(rect.top + rect.height - e.clientY) <= offset;
@@ -32,6 +32,7 @@ export const makeDraggable = ({
         const onMouseMove = e => {
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
+            console.log(dx, dy);
             if (resize) {
                 on('resize', Object.assign({}, resize, {
                     x: elementX + dx,

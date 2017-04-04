@@ -82,18 +82,21 @@ const addNode = node => {
                 }
             }
             if (name === 'resize') {
-                const lastNode = state.find(n => n.id === node.id);
-                const width = lastNode.width + Math.floor(event.dx / 60);
-                const height = lastNode.height + Math.floor(event.dy / 60);
-                console.log(width, height);
-                if (prevWidth !== width || prevHeight !== height) {
-                    prevWidth = width;
-                    prevHeight = height;
-                    lastState = state.map(n => n.id === node.id ? Object.assign({}, n, { width, height }) : n);
-                    console.log(JSON.stringify(lastState));
-                    lastState = reduce(lastState, node.id);
-                    render(container, lastState);
-                }
+                const dx = Math.floor(event.dx / 60);
+                const dy = Math.floor(event.dy / 60);
+                lastState = state.map(n => {
+                    if (n.id === node.id) {
+                        return Object.assign({}, n, {
+                            x: n.x + (event.left ? dx : 0),
+                            y: n.y + (event.top ? dy : 0),
+                            width: n.width + (event.left && -dx || event.right && dx || 0),
+                            height: n.height + (event.top && -dy || event.bottom && dy || 0)
+                        });
+                    }
+                    return n;
+                });
+                lastState = reduce(lastState, node.id);
+                render(container, lastState);
             }
             if (name === 'end') {
                 state = lastState;
