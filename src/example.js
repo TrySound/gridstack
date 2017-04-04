@@ -85,7 +85,7 @@ const addNode = node => {
         };
 
         const onMouseUp = () => {
-            state = lastState
+            state = lastState;
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
