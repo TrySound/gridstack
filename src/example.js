@@ -2,16 +2,16 @@ import { packNodes } from './engine.js';
 
 const reduce = (nodes, updatingId) => {
     return packNodes({
-        hoist: true,
+        // hoist: true,
         updatingId,
         nodes
     });
 };
 
 let state = [
-    { id: 1, x: 0, y: 0, width: 3, height: 3 },
     { id: 2, x: 2, y: 4, width: 3, height: 3, static: true },
-    { id: 3, x: 2, y: 3, width: 3, height: 3 }
+    { id: 1, x: 4, y: 0, width: 3, height: 3 },
+    { id: 3, x: 3, y: 1, width: 3, height: 3 }
 ];
 
 const container = document.createElement('div');
@@ -80,6 +80,7 @@ const addNode = node => {
                 }
                 return node;
             });
+            console.log(JSON.stringify(state));
             state = reduce(state, Number(id));
             state.forEach(updateNode);
         };

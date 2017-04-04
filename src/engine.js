@@ -1,3 +1,5 @@
+import { orderBy, isInterceptedHorz } from './utils.js';
+
 /*
 type Node = {
     id: string | number,
@@ -9,15 +11,7 @@ type Node = {
 }
 */
 
-const isIntercepted = (a, b) =>
-    !(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
-
-const isInterceptedVertically = (target, movable) =>
-    movable.x < target.x + target.width && target.x < movable.x + movable.width;
-
 const getRight = nodes => nodes.reduce((acc, node) => Math.max(acc, node.x + node.width), 0);
-
-const getBottom = nodes => nodes.reduce((acc, node) => Math.max(acc, node.y + node.height), 0);
 
 const normalizeNode = (node, maxWidth) => {
     const width = Math.min(Math.max(node.width, 1), maxWidth);
@@ -31,27 +25,25 @@ const normalizeNode = (node, maxWidth) => {
 
 const sortNodes = function(nodes, dir, maxWidth) {
     const width = maxWidth === Infinity ? getRight(nodes) : maxWidth;
-    return nodes.slice().sort((a, b) => {
-        const da = dir * (a.x + a.y * width);
-        const db = dir * (b.x + b.y * width);
-        if (da < db) {
-            return -1;
-        }
-        if (da > db) {
-            return 1;
-        }
-        return 0;
-    });
+    return orderBy(nodes, d => dir * (d.x + d.y * width));
 };
 
 const resolveNodes = nodes => [
     ...nodes.filter(node => node.static),
     ...nodes.filter(node => !node.static)
 ].reduce((acc, node, index) => {
-    const interceptedNodes = acc.filter((n, i) => index !== i && isIntercepted(node, n));
+    if (node.static) {
+        return [...acc, node];
+    }
+    const interceptedNodes = orderBy(acc.filter((n, i) => index !== i && isInterceptedHorz(node, n)), d => d.y);
     if (interceptedNodes.length) {
         const newNode = Object.assign({}, node, {
-            y: getBottom(interceptedNodes)
+            y: interceptedNodes.reduce((acc2, n) => {
+                if (!(acc2 + node.height <= n.y || n.y + n.height <= acc2)) {
+                    return n.y + n.height;
+                }
+                return acc2;
+            }, node.y)
         });
         return [...acc, newNode];
     }
@@ -62,7 +54,7 @@ const hoistNodes = nodes => nodes.reduce((acc, node, index) => {
     if (node.static) {
         return acc;
     }
-    const vertNodes = acc.filter((n, i) => index !== i && isInterceptedVertically(n, node));
+    const vertNodes = acc.filter((n, i) => index !== i && isInterceptedHorz(n, node));
     const bottomDynamic = vertNodes
         .filter(n => !n.static && n.y + n.height <= node.y)
         .reduce((acc, n) => n.y + n.height, 0);
@@ -83,9 +75,9 @@ export const packNodes = ({
 }) => {
     const sorted = sortNodes(nodes, 1, maxWidth);
     const normalized = sorted.map(node => normalizeNode(node, maxWidth));
+    const updatingIndex = normalized.findIndex(node => node.id === updatingId);
     const resolvedNodes = resolveNodes(normalized);
     if (hoist) {
-        const updatingIndex = resolvedNodes.findIndex(node => node.id === updatingId);
         return hoistNodes(resolvedNodes, updatingIndex);
     }
     return resolvedNodes;
