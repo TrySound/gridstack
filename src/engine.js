@@ -11,7 +11,7 @@ type Node = {
 }
 */
 
-const normalizeNode = (node, maxWidth) => {
+const normalizeNodes = (nodes, maxWidth) => nodes.map(node => {
     const width = Math.min(Math.max(node.width, 1), maxWidth);
     return Object.assign({}, node, {
         x: Math.min(Math.max(0, node.x), maxWidth - width),
@@ -19,11 +19,11 @@ const normalizeNode = (node, maxWidth) => {
         width,
         height: Math.max(node.height, 1)
     });
-};
+});
 
-const sortNodes = function(nodes, dir, maxWidth) {
+const sortNodes = function(nodes, maxWidth) {
     const width = maxWidth === Infinity ? getRight(nodes) : maxWidth;
-    return orderBy(nodes, d => dir * (d.x + d.y * width));
+    return orderBy(nodes, d => d.x + d.y * width);
 };
 
 const resolveNodes = (nodes, updatingId) => [
@@ -63,13 +63,11 @@ export const packNodes = ({
     updatingId = null,
     nodes
 }) => {
-    const sorted = sortNodes(nodes, 1, maxWidth);
-    const normalized = sorted.map(node => normalizeNode(node, maxWidth));
-    const resolvedNodes = resolveNodes(normalized, updatingId);
-    if (hoist) {
-        return hoistNodes(resolvedNodes);
-    }
-    return resolvedNodes;
+    const sorted = sortNodes(nodes, maxWidth);
+    const normalized = normalizeNodes(sorted, maxWidth);
+    const resolved = resolveNodes(normalized, updatingId);
+    const hoisted = hoist ? hoistNodes(resolved) : resolved;
+    return hoisted;
 };
 /*
 export const addNode = ({
