@@ -10,6 +10,7 @@ env:
 rules:
   no-unused-vars: 'error'
   no-undef: 'error'
+  no-shadow: 'error'
   indent: ['error', 4, {
     SwitchCase: 1
   }]

@@ -1,4 +1,4 @@
-import { orderBy, isInterceptedHorz } from './utils.js';
+import { orderBy, isInterceptedHorz, getRight, getBottom, lowerNode } from './utils.js';
 
 /*
 type Node = {
@@ -10,8 +10,6 @@ type Node = {
     static?: boolean
 }
 */
-
-const getRight = nodes => nodes.reduce((acc, node) => Math.max(acc, node.x + node.width), 0);
 
 const normalizeNode = (node, maxWidth) => {
     const width = Math.min(Math.max(node.width, 1), maxWidth);
@@ -38,12 +36,7 @@ const resolveNodes = nodes => [
     const interceptedNodes = orderBy(acc.filter((n, i) => index !== i && isInterceptedHorz(node, n)), d => d.y);
     if (interceptedNodes.length) {
         const newNode = Object.assign({}, node, {
-            y: interceptedNodes.reduce((acc2, n) => {
-                if (!(acc2 + node.height <= n.y || n.y + n.height <= acc2)) {
-                    return n.y + n.height;
-                }
-                return acc2;
-            }, node.y)
+            y: lowerNode(interceptedNodes, node, node.y)
         });
         return [...acc, newNode];
     }
@@ -55,12 +48,8 @@ const hoistNodes = nodes => nodes.reduce((acc, node, index) => {
         return acc;
     }
     const vertNodes = acc.filter((n, i) => index !== i && isInterceptedHorz(n, node));
-    const bottomDynamic = vertNodes
-        .filter(n => !n.static && n.y + n.height <= node.y)
-        .reduce((acc, n) => n.y + n.height, 0);
-    const bottom = vertNodes
-        .filter(n => n.static)
-        .reduce((acc, n) => n.y < acc + node.height && acc < n.y + n.height ? n.y + n.height : acc, bottomDynamic);
+    const bottomDynamic = getBottom(vertNodes.filter(n => !n.static && n.y + n.height <= node.y));
+    const bottom = lowerNode(vertNodes.filter(n => n.static), node, bottomDynamic);
     const newNode = Object.assign({}, node, {
         y: bottom
     });

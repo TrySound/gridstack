@@ -71,14 +71,14 @@ const addNode = node => {
         const onMouseMove = e => {
             const x = nodeX + (e.clientX - startX);
             const y = nodeY + (e.clientY - startY);
-            state = state.map(node => {
-                if (String(node.id) === id) {
-                    return Object.assign({}, node, {
+            state = state.map(n => {
+                if (String(n.id) === id) {
+                    return Object.assign({}, n, {
                         x: Math.floor(x / 60),
                         y: Math.floor(y / 60)
                     });
                 }
-                return node;
+                return n;
             });
             console.log(JSON.stringify(state));
             state = reduce(state, Number(id));
