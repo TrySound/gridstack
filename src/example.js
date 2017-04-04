@@ -59,7 +59,7 @@ const addNode = node => {
     container.appendChild(element);
     element.addEventListener('mousedown', downEvent => {
         const target = downEvent.currentTarget;
-        const id = target.dataset.id;
+        const id = Number(target.dataset.id);
         const { left: containerX, top: containerY } = container.getBoundingClientRect();
         const { left: elementX, top: elementY } = target.getBoundingClientRect();
         const nodeX = elementX - containerX;
@@ -68,24 +68,24 @@ const addNode = node => {
         const startX = downEvent.clientX;
         const startY = downEvent.clientY;
 
+        let { x: prevX, y: prevY } = state.find(n => n.id === id);
+        let lastState = state;
+
         const onMouseMove = e => {
-            const x = nodeX + (e.clientX - startX);
-            const y = nodeY + (e.clientY - startY);
-            state = state.map(n => {
-                if (String(n.id) === id) {
-                    return Object.assign({}, n, {
-                        x: Math.floor(x / 60),
-                        y: Math.floor(y / 60)
-                    });
-                }
-                return n;
-            });
-            console.log(JSON.stringify(state));
-            state = reduce(state, Number(id));
-            state.forEach(updateNode);
+            const x = Math.floor((nodeX + e.clientX - startX) / 60);
+            const y = Math.floor((nodeY + e.clientY - startY) / 60);
+            if (x !== prevX || y !== prevY) {
+                prevX = x;
+                prevY = y;
+                lastState = state.map(n => n.id === id ? Object.assign({}, n, { x, y }) : n);
+                console.log(JSON.stringify(lastState));
+                lastState = reduce(lastState, id);
+                lastState.forEach(updateNode);
+            }
         };
 
         const onMouseUp = () => {
+            state = lastState
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
