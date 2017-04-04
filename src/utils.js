@@ -14,3 +14,7 @@ export const getBottom = nodes => nodes.reduce((acc, node) => Math.max(acc, node
 
 export const lowerNode = (nodes, node, start) =>
     nodes.reduce((acc, n) => n.y < acc + node.height && acc < n.y + n.height ? n.y + n.height : acc, start);
+
+const hasNodePoint = (node, x, y) => isIntercepted(node, { x, y, width: 1, height: 1 });
+
+export const findNode = (nodes, x, y) => nodes.reduce((acc, node) => hasNodePoint(node, x, y) ? node : acc, null);
