@@ -244,15 +244,33 @@ test('non-static nodes are resolved with not intercepted firstly', () => {
     ]);
 });
 
-test.skip('updating node forces dymnamic and forced by static', () => {
+test('updating node forces dymnamic', () => {
     expect(
         packNodes({
+            updatingId: 2,
             nodes: [
-
+                { id: 1, x: 2, y: 2, width: 3, height: 3 },
+                { id: 2, x: 4, y: 4, width: 3, height: 3 }
             ]
         })
     ).toEqual([
+        { id: 2, x: 4, y: 4, width: 3, height: 3 },
+        { id: 1, x: 2, y: 7, width: 3, height: 3 }
+    ]);
+});
 
+test('updating is forced by static', () => {
+    expect(
+        packNodes({
+            updatingId: 2,
+            nodes: [
+                { id: 1, x: 2, y: 2, width: 3, height: 3, static: true },
+                { id: 2, x: 4, y: 4, width: 3, height: 3 }
+            ]
+        })
+    ).toEqual([
+        { id: 1, x: 2, y: 2, width: 3, height: 3, static: true },
+        { id: 2, x: 4, y: 5, width: 3, height: 3 }
     ]);
 });
 

@@ -26,9 +26,10 @@ const sortNodes = function(nodes, dir, maxWidth) {
     return orderBy(nodes, d => dir * (d.x + d.y * width));
 };
 
-const resolveNodes = nodes => [
-    ...nodes.filter(node => node.static),
-    ...nodes.filter(node => !node.static)
+const resolveNodes = (nodes, updatingId) => [
+    ...nodes.filter(node => node.static && node.id !== updatingId),
+    ...nodes.filter(node => node.id === updatingId),
+    ...nodes.filter(node => !node.static && node.id !== updatingId)
 ].reduce((acc, node, index) => {
     if (node.static) {
         return [...acc, node];
@@ -64,10 +65,9 @@ export const packNodes = ({
 }) => {
     const sorted = sortNodes(nodes, 1, maxWidth);
     const normalized = sorted.map(node => normalizeNode(node, maxWidth));
-    const updatingIndex = normalized.findIndex(node => node.id === updatingId);
-    const resolvedNodes = resolveNodes(normalized);
+    const resolvedNodes = resolveNodes(normalized, updatingId);
     if (hoist) {
-        return hoistNodes(resolvedNodes, updatingIndex);
+        return hoistNodes(resolvedNodes);
     }
     return resolvedNodes;
 };

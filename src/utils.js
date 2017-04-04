@@ -1,8 +1,8 @@
-export const orderPair = (a, b) => a < b && -1 || a > b && 1 || 0;
+const orderPair = (a, b) => a < b && -1 || a > b && 1 || 0;
 
 export const orderBy = (array, get) => array.slice().sort((a, b) => orderPair(get(a), get(b)));
 
-export const isInterceptedVert = (a, b) => b.y < a.y + a.height && a.y < b.y + b.height;
+const isInterceptedVert = (a, b) => b.y < a.y + a.height && a.y < b.y + b.height;
 
 export const isInterceptedHorz = (a, b) => b.x < a.x + a.width && a.x < b.x + b.width;
 
