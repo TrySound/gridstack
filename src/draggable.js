@@ -1,3 +1,5 @@
+import { getMouse} from './drag.js';
+
 const checkResize = (rect, e, offset = 12) => {
     const top = Math.abs(rect.top - e.clientY) <= offset;
     const right = Math.abs(rect.left + rect.width - e.clientX) <= offset;
@@ -24,14 +26,14 @@ export const makeDraggable = ({
         const elementRect = element.getBoundingClientRect();
         const elementX = elementRect.left - containerRect.left;
         const elementY = elementRect.top - containerRect.top;
-        const startX = downEvent.clientX;
-        const startY = downEvent.clientY;
         const resize = checkResize(elementRect, downEvent);
+        const [startX, startY] = getMouse(container, downEvent);
         on('start');
 
         const onMouseMove = e => {
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
+            const [moveX, moveY] = getMouse(container, e);
+            const dx = Math.max(0, moveX) - startX;
+            const dy = Math.max(0, moveY) - startY;
             console.log(dx, dy);
             if (resize) {
                 on('resize', Object.assign({}, resize, {
