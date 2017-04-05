@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import { findNode } from './utils.js';
 
 test('find node by x and y', () => {

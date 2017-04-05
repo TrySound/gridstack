@@ -1,4 +1,4 @@
-const getMouse = (rect, event) => [event.clientX - rect.left, event.clientY - rect.top];;
+const getMouse = (rect, event) => [event.clientX - rect.left, event.clientY - rect.top];
 
 export const trackDrag = (element, dispatch) => {
     const onMouseDown = downEvent => {
@@ -111,4 +111,4 @@ export const dragNode = ({ params, node, start, end }) => {
             y: node.y + dy
         })
     };
-}
+};

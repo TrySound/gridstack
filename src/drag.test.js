@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import { dragNode } from './drag.js';
 
 const params = {
