@@ -1,6 +1,6 @@
 import { getBottom, findNode } from './utils.js';
 import { packNodes } from './engine.js';
-import { makeDraggable } from './draggable.js';
+import { trackDrag, dragNode } from './drag.js';
 
 const render = (container, state) => {
     state.forEach(node => {
@@ -41,6 +41,40 @@ const container = document.createElement('div');
 container.style.userSelect = 'none';
 container.style.position = 'relative';
 
+const params = {
+    cellWidth: 60,
+    cellHeight: 60
+};
+
+let lastState = state;
+
+trackDrag(container, action => {
+    if (action.type === 'drag') {
+        const node = findNode(state, Math.floor(action.startX / params.cellWidth), Math.floor(action.startY / params.cellHeight));
+        if (node) {
+            const drag = dragNode({
+                node,
+                params,
+                start: {
+                    x: action.startX,
+                    y: action.startY
+                },
+                end: {
+                    x: action.x,
+                    y: action.y
+                },
+            });
+            console.log(node, drag.node);
+            lastState = lastState.map(n => n.id === node.id ? drag.node : n);
+            lastState = reduce(lastState, node.id);
+            render(container, lastState);
+        }
+    }
+    if (action.type === 'end') {
+        state = lastState;
+    }
+});
+
 const addNode = node => {
     const element = document.createElement('div');
     element.dataset.id = node.id;
@@ -57,47 +91,6 @@ const addNode = node => {
     child.textContent = `${node.id} ${node.static ? 'static' : 'dynamic'}`;
     element.appendChild(child);
     container.appendChild(element);
-    let lastState = state;
-    makeDraggable({
-        container,
-        element,
-        getNode: () => state.find(n => n.id === node.id),
-        dispatch: action => {
-            if (action.type === 'MOVE_GHOST' || action.type === 'MOVE') {
-                lastState = state.map(n => {
-                    if (n.id === node.id) {
-                        return Object.assign({}, n, {
-                            x: n.x + Math.floor(action.dx / 60),
-                            y: n.y + Math.floor(action.dy / 60)
-                        });
-                    }
-                    return n;
-                });
-                lastState = reduce(lastState, node.id);
-                render(container, lastState);
-            }
-            if (action.type === 'RESIZE_GHOST' || action.type === 'RESIZE') {
-                const dx = Math.floor(action.dx / 60);
-                const dy = Math.floor(action.dy / 60);
-                lastState = state.map(n => {
-                    if (n.id === node.id) {
-                        return Object.assign({}, n, {
-                            x: n.x + (action.left ? dx : 0),
-                            y: n.y + (action.top ? dy : 0),
-                            width: n.width + (action.left && -dx || action.right && dx || 0),
-                            height: n.height + (action.top && -dy || action.bottom && dy || 0)
-                        });
-                    }
-                    return n;
-                });
-                lastState = reduce(lastState, node.id);
-                render(container, lastState);
-            }
-            if (action.type === 'MOVE' || action.type === 'RESIZE') {
-                state = lastState;
-            }
-        }
-    });
 };
 
 document.body.appendChild(container);
