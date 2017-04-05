@@ -1,11 +1,9 @@
-export const getMouse = (element, event) => {
-    const rect = element.getBoundingClientRect();
-    return [event.clientX - rect.left, event.clientY - rect.top];
-};
+const getMouse = (rect, event) => [event.clientX - rect.left, event.clientY - rect.top];;
 
 export const trackDrag = (element, dispatch) => {
     const onMouseDown = downEvent => {
-        const [startX, startY] = getMouse(element, downEvent);
+        const startRect = element.getBoundingClientRect();
+        const [startX, startY] = getMouse(startRect, downEvent);
 
         dispatch({
             type: 'start',
@@ -15,7 +13,7 @@ export const trackDrag = (element, dispatch) => {
         });
 
         const onMouseMove = e => {
-            const [dragX, dragY] = getMouse(element, e);
+            const [dragX, dragY] = getMouse(startRect, e);
             dispatch({
                 type: 'drag',
                 x: dragX,
@@ -27,7 +25,7 @@ export const trackDrag = (element, dispatch) => {
         };
 
         const onMouseUp = e => {
-            const [endX, endY] = getMouse(element, e);
+            const [endX, endY] = getMouse(startRect, e);
             dispatch({
                 type: 'end',
                 x: endX,

@@ -1,10 +1,11 @@
-import { getMouse} from './drag.js';
+import { trackDrag } from './drag.js';
 
-const checkResize = (rect, e, offset = 12) => {
-    const top = Math.abs(rect.top - e.clientY) <= offset;
-    const right = Math.abs(rect.left + rect.width - e.clientX) <= offset;
-    const bottom = Math.abs(rect.top + rect.height - e.clientY) <= offset;
-    const left = Math.abs(rect.left - e.clientX) <= offset;
+const checkResize = (rect, action, offset = 6) => {
+    const double = offset * 2;
+    const top = Math.abs(action.y) <= double;
+    const right = Math.abs(rect.width - action.x) <= double;
+    const bottom = Math.abs(rect.height - action.y) <= double;
+    const left = Math.abs(action.x) <= double;
     if (top || right || bottom || left) {
         return {
             top,
@@ -17,48 +18,56 @@ const checkResize = (rect, e, offset = 12) => {
 };
 
 export const makeDraggable = ({
-    container = document.body,
     element,
-    on = () => {}
+    getParams = () => ({}),
+    getNode,
+    dispatch = () => {}
 }) => {
-    element.addEventListener('mousedown', downEvent => {
-        const containerRect = container.getBoundingClientRect();
-        const elementRect = element.getBoundingClientRect();
-        const elementX = elementRect.left - containerRect.left;
-        const elementY = elementRect.top - containerRect.top;
-        const resize = checkResize(elementRect, downEvent);
-        const [startX, startY] = getMouse(container, downEvent);
-        on('start');
-
-        const onMouseMove = e => {
-            const [moveX, moveY] = getMouse(container, e);
-            const dx = Math.max(0, moveX) - startX;
-            const dy = Math.max(0, moveY) - startY;
-            console.log(dx, dy);
+    let resize;
+    return trackDrag(element, action => {
+        const params = getParams();
+        if (action.type === 'start') {
+            resize = checkResize(element.getBoundingClientRect(), action, params.resizeOffset);
+        }
+        if (action.type === 'drag') {
             if (resize) {
-                on('resize', Object.assign({}, resize, {
-                    x: elementX + dx,
-                    y: elementY + dy,
-                    dx,
-                    dy
-                }));
+                dispatch({
+                    type: 'RESIZE_GHOST',
+                    top: resize.top,
+                    right: resize.right,
+                    bottom: resize.bottom,
+                    left: resize.left,
+                    dx: action.dx,
+                    dy: action.dy
+                });
             } else {
-                on('drag', {
-                    x: elementX + dx,
-                    y: elementY + dy,
-                    dx,
-                    dy
+                dispatch({
+                    type: 'MOVE_GHOST',
+                    dx: action.dx,
+                    dy: action.dy,
+                    className: action.className
                 });
             }
-        };
-
-        const onMouseUp = () => {
-            on('end');
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        };
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
+        }
+        if (action.type === 'end') {
+            if (resize) {
+                dispatch({
+                    type: 'RESIZE',
+                    top: resize.top,
+                    right: resize.right,
+                    bottom: resize.bottom,
+                    left: resize.left,
+                    dx: action.dx,
+                    dy: action.dy
+                });
+            } else {
+                dispatch({
+                    type: 'MOVE',
+                    dx: action.dx,
+                    dy: action.dy,
+                    className: action.className
+                });
+            }
+        }
     });
 };

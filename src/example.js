@@ -57,40 +57,18 @@ const addNode = node => {
     child.textContent = `${node.id} ${node.static ? 'static' : 'dynamic'}`;
     element.appendChild(child);
     container.appendChild(element);
-    let lastState;
-    let prevX;
-    let prevY;
-    let prevWidth;
-    let prevHeight;
+    let lastState = state;
     makeDraggable({
         container,
         element,
-        on: (name, event) => {
-            if (name === 'start') {
-                lastState = state;
-            }
-            if (name === 'drag') {
-                const x = Math.floor(event.x / 60);
-                const y = Math.floor(event.y / 60);
-                if (x !== prevX || y !== prevY) {
-                    prevX = x;
-                    prevY = y;
-                    lastState = state.map(n => n.id === node.id ? Object.assign({}, n, { x, y }) : n);
-                    console.log(JSON.stringify(lastState));
-                    lastState = reduce(lastState, node.id);
-                    render(container, lastState);
-                }
-            }
-            if (name === 'resize') {
-                const dx = Math.floor(event.dx / 60);
-                const dy = Math.floor(event.dy / 60);
+        getNode: () => state.find(n => n.id === node.id),
+        dispatch: action => {
+            if (action.type === 'MOVE_GHOST' || action.type === 'MOVE') {
                 lastState = state.map(n => {
                     if (n.id === node.id) {
                         return Object.assign({}, n, {
-                            x: n.x + (event.left ? dx : 0),
-                            y: n.y + (event.top ? dy : 0),
-                            width: n.width + (event.left && -dx || event.right && dx || 0),
-                            height: n.height + (event.top && -dy || event.bottom && dy || 0)
+                            x: n.x + Math.floor(action.dx / 60),
+                            y: n.y + Math.floor(action.dy / 60)
                         });
                     }
                     return n;
@@ -98,7 +76,24 @@ const addNode = node => {
                 lastState = reduce(lastState, node.id);
                 render(container, lastState);
             }
-            if (name === 'end') {
+            if (action.type === 'RESIZE_GHOST' || action.type === 'RESIZE') {
+                const dx = Math.floor(action.dx / 60);
+                const dy = Math.floor(action.dy / 60);
+                lastState = state.map(n => {
+                    if (n.id === node.id) {
+                        return Object.assign({}, n, {
+                            x: n.x + (action.left ? dx : 0),
+                            y: n.y + (action.top ? dy : 0),
+                            width: n.width + (action.left && -dx || action.right && dx || 0),
+                            height: n.height + (action.top && -dy || action.bottom && dy || 0)
+                        });
+                    }
+                    return n;
+                });
+                lastState = reduce(lastState, node.id);
+                render(container, lastState);
+            }
+            if (action.type === 'MOVE' || action.type === 'RESIZE') {
                 state = lastState;
             }
         }
