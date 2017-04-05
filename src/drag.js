@@ -66,38 +66,50 @@ const checkResize = (rect, point, offset = 6) => {
     return null;
 };
 
-export const dragNode = ({ params, node, start, end }) => {
-    const rect = {
-        x: node.x * params.cellWidth,
-        y: node.y * params.cellHeight,
-        width: node.width * params.cellWidth,
-        height: node.height * params.cellHeight
-    };
-    const endX = Math.max(start.x - rect.x, end.x);
-    const endY = Math.max(start.y - rect.y, end.y);
+const resizeNode = (params, node, start, end, resize) => {
+    const nodeX = node.x * params.cellWidth;
+    const nodeWidth = node.width * params.cellWidth;
+    const endX
+        = resize.l
+        ? Math.min(Math.max(start.x - nodeX, end.x), start.x - params.cellWidth + nodeWidth)
+        : resize.r
+        ? Math.max(start.x + params.cellWidth - nodeWidth, end.x)
+        : start.x;
+    const nodeY = node.y * params.cellHeight;
+    const nodeHeight = node.height * params.cellHeight;
+    const endY
+        = resize.t
+        ? Math.min(Math.max(start.y - nodeY, end.y), start.y - params.cellHeight + nodeHeight)
+        : resize.b
+        ? Math.max(start.y + params.cellHeight - nodeHeight, end.y)
+        : start.y;
+
     const elementDx = endX - start.x;
     const elementDy = endY - start.y;
-    const dx = Math.floor(endX / params.cellWidth) - Math.floor(start.x / params.cellWidth);
-    const dy = Math.floor(endY / params.cellHeight) - Math.floor(start.y / params.cellHeight);
-    const resize = checkResize(rect, start, params.resizeOffset);
-    if (resize) {
-        return {
-            type: 'resize',
-            element: {
-                x: node.x * params.cellWidth + (resize.l ? elementDx : 0),
-                y: node.y * params.cellHeight + (resize.t ? elementDy : 0),
-                width: node.width * params.cellWidth + (resize.l && -(elementDx) || resize.r && (elementDx) || 0),
-                height: node.height * params.cellHeight + (resize.t && -(elementDy) || resize.b && (elementDy) || 0)
-            },
-            node: Object.assign({}, node, {
-                x: node.x + (resize.l ? dx : 0),
-                y: node.y + (resize.t ? dy : 0),
-                width: node.width + (resize.l && -dx || resize.r && dx || 0),
-                height: node.height + (resize.t && -dy || resize.b && dy || 0)
-            })
-        };
-    }
+    const nodeDx = Math.floor(endX / params.cellWidth) - Math.floor(start.x / params.cellWidth);
+    const nodeDy = Math.floor(endY / params.cellHeight) - Math.floor(start.y / params.cellHeight);
+    return {
+        type: 'resize',
+        element: {
+            x: nodeX + (resize.l ? elementDx : 0),
+            y: nodeY + (resize.t ? elementDy : 0),
+            width: nodeWidth + (resize.l ? -elementDx : resize.r ? elementDx : 0),
+            height: nodeHeight + (resize.t ? -elementDy : resize.b ? elementDy : 0)
+        },
+        node: Object.assign({}, node, {
+            x: node.x + (resize.l ? nodeDx : 0),
+            y: node.y + (resize.t ? nodeDy : 0),
+            width: node.width + (resize.l ? -nodeDx : resize.r ? nodeDx : 0),
+            height: node.height + (resize.t ? -nodeDy : resize.b ? nodeDy : 0)
+        })
+    };
+};
 
+const moveNode = (params, node, start, end) => {
+    const elementDx = end.x - start.x;
+    const elementDy = end.y - start.y;
+    const dx = Math.floor(end.x / params.cellWidth) - Math.floor(start.x / params.cellWidth);
+    const dy = Math.floor(end.y / params.cellHeight) - Math.floor(start.y / params.cellHeight);
     return {
         type: 'move',
         element: {
@@ -111,4 +123,17 @@ export const dragNode = ({ params, node, start, end }) => {
             y: node.y + dy
         })
     };
+};
+
+export const dragNode = ({ params, node, start, end }) => {
+    const rect = {
+        x: node.x * params.cellWidth,
+        y: node.y * params.cellHeight,
+        width: node.width * params.cellWidth,
+        height: node.height * params.cellHeight
+    };
+    const resize = checkResize(rect, start, params.resizeSize);
+    return resize
+        ? resizeNode(params, node, start, end, resize)
+        : moveNode(params, node, start, end);
 };

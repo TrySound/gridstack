@@ -2,6 +2,11 @@ import { getBottom, findNode } from './utils.js';
 import { packNodes } from './engine.js';
 import { trackDrag, dragNode } from './drag.js';
 
+const params = {
+    cellWidth: 30,
+    cellHeight: 30
+};
+
 const render = (container, state) => {
     state.forEach(node => {
         Array.from(container.children).forEach(element => {
@@ -12,14 +17,14 @@ const render = (container, state) => {
                 element.style.boxSizing = 'border-box';
                 element.style.left = 0;
                 element.style.top = 0;
-                element.style.transform = `translate(${node.x * 60}px, ${node.y * 60}px)`;
+                element.style.transform = `translate(${node.x * params.cellWidth}px, ${node.y * params.cellHeight}px)`;
                 element.style.transition = `.1s`;
-                element.style.width = `${node.width * 60}px`;
-                element.style.height = `${node.height * 60}px`;
+                element.style.width = `${node.width * params.cellWidth}px`;
+                element.style.height = `${node.height * params.cellHeight}px`;
             }
         });
     });
-    container.style.height = getBottom(state) * 60 + 'px';
+    container.style.height = getBottom(state) * params.cellHeight + 'px';
 };
 
 const reduce = (nodes, updatingId) => {
@@ -41,11 +46,6 @@ const container = document.createElement('div');
 container.style.userSelect = 'none';
 container.style.position = 'relative';
 
-const params = {
-    cellWidth: 60,
-    cellHeight: 60
-};
-
 let lastState = state;
 
 trackDrag(container, action => {
@@ -64,7 +64,6 @@ trackDrag(container, action => {
                     y: action.y
                 },
             });
-            console.log(node, drag.node);
             lastState = lastState.map(n => n.id === node.id ? drag.node : n);
             lastState = reduce(lastState, node.id);
             render(container, lastState);
@@ -93,6 +92,7 @@ const addNode = node => {
     container.appendChild(element);
 };
 
+document.body.style.margin = '40px';
 document.body.appendChild(container);
 
 state = reduce(state);
