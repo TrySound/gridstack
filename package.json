@@ -11,8 +11,7 @@
     "url": "git+https://github.com/TrySound/gridstack.git"
   },
   "scripts": {
-    "build": "webpack",
-    "prepublish": "yarn run build",
+    "build-example": "webpack",
     "start": "webpack-dev-server --open",
     "test": "cross-env BABEL_ENV=test jest --coverage",
     "posttest": "eslint src"
