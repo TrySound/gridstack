@@ -13,6 +13,7 @@ export const trackDrag = (element, dispatch) => {
         });
 
         const onMouseMove = e => {
+            e.preventDefault();
             const [dragX, dragY] = getMouse(startRect, e);
             dispatch({
                 type: 'drag',
