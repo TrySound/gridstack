@@ -380,6 +380,7 @@ const reduce = (nodes, updatingId) => {
 
 let state = [
     { id: 2, x: 2, y: 4, width: 3, height: 3, static: true },
+    { id: 4, x: 7, y: 4, width: 3, height: 3, static: true },
     { id: 1, x: 4, y: 0, width: 3, height: 3 },
     { id: 3, x: 3, y: 1, width: 3, height: 3 }
 ];
