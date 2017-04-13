@@ -1,6 +1,6 @@
 const getMouse = (rect, event) => [event.clientX - rect.left, event.clientY - rect.top];
 
-export const trackDrag = (element, dispatch) => {
+export const trackDrag = (element, dispatch, offset = 3) => {
     const onMouseDown = downEvent => {
         const startRect = element.getBoundingClientRect();
         const [startX, startY] = getMouse(startRect, downEvent);
@@ -13,18 +13,22 @@ export const trackDrag = (element, dispatch) => {
         });
 
         const onMouseMove = e => {
-            e.preventDefault();
             const [dragX, dragY] = getMouse(startRect, e);
-            dispatch({
-                type: 'drag',
-                startX,
-                startY,
-                x: dragX,
-                y: dragY,
-                dx: dragX - startX,
-                dy: dragY - startY,
-                className: downEvent.target.className
-            });
+            const dx = dragX - startX;
+            const dy = dragY - startY;
+            if (offset < Math.abs(dx) || offset < Math.abs(dy)) {
+                e.preventDefault();
+                dispatch({
+                    type: 'drag',
+                    startX,
+                    startY,
+                    x: dragX,
+                    y: dragY,
+                    dx,
+                    dy,
+                    className: downEvent.target.className
+                });
+            }
         };
 
         const onMouseUp = e => {

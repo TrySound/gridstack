@@ -43,7 +43,6 @@ let state = [
 
 const container = document.createElement('div');
 
-container.style.userSelect = 'none';
 container.style.position = 'relative';
 
 let lastState = state;
