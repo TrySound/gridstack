@@ -1,6 +1,6 @@
 {
   "name": "@trysound/gridstack",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "packable layout library",
   "main": "dist/gridstack.js",
   "files": [
