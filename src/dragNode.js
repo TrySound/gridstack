@@ -1,59 +1,3 @@
-const getMouse = (rect, event) => [event.clientX - rect.left, event.clientY - rect.top];
-
-export const trackDrag = (element, dispatch, offset = 3) => {
-    const onMouseDown = downEvent => {
-        const startRect = element.getBoundingClientRect();
-        const [startX, startY] = getMouse(startRect, downEvent);
-
-        dispatch({
-            type: 'start',
-            x: startX,
-            y: startY,
-            className: downEvent.target.className
-        });
-
-        const onMouseMove = e => {
-            const [endX, endY] = getMouse(startRect, e);
-            const dx = endX - startX;
-            const dy = endY - startY;
-            if (offset < Math.abs(dx) || offset < Math.abs(dy)) {
-                e.preventDefault();
-                dispatch({
-                    type: 'drag',
-                    startX,
-                    startY,
-                    endX,
-                    endY,
-                    dx,
-                    dy,
-                    className: downEvent.target.className
-                });
-            }
-        };
-
-        const onMouseUp = e => {
-            const [endX, endY] = getMouse(startRect, e);
-            dispatch({
-                type: 'end',
-                startX,
-                startY,
-                endX,
-                endY,
-                dx: endX - startX,
-                dy: endY - startY,
-                className: downEvent.target.className
-            });
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        };
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    };
-    element.addEventListener('mousedown', onMouseDown);
-    return () => element.removeEventListener('mousedown', onMouseDown);
-};
-
 const checkResize = (rect, point, offset = 6) => {
     const t = Math.abs(rect.y - point.y) <= offset;
     const r = Math.abs(rect.x + rect.width - point.x) <= offset;
@@ -129,7 +73,7 @@ const moveNode = (node, params, action) => {
     };
 };
 
-export const dragNode = ({ node, params, action }) => {
+const dragNode = ({ node, params, action }) => {
     const rect = {
         x: node.x * params.cellWidth,
         y: node.y * params.cellHeight,
@@ -141,3 +85,5 @@ export const dragNode = ({ node, params, action }) => {
         ? resizeNode(node, params, action, resize)
         : moveNode(node, params, action);
 };
+
+export default dragNode;

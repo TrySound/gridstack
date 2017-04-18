@@ -69,27 +69,3 @@ export const packNodes = ({
     const hoisted = hoist ? hoistNodes(resolved) : resolved;
     return hoisted;
 };
-
-/*
-
-export const addNodeToBottom = ({
-    maxWidth = Infinity,
-    nodes,
-    id,
-    width = 1,
-    height = 1
-}) => {
-    return nodes;
-};
-
-export const addNodeToRight = ({
-    maxWidth = Infinity,
-    nodes,
-    id,
-    width = 1,
-    height = 1
-}) => {
-    return nodes;
-};
-
-*/

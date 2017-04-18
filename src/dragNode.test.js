@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { dragNode } from './drag.js';
+import dragNode from './dragNode.js';
 
 const params = {
     cellWidth: 30,

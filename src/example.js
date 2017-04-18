@@ -1,6 +1,4 @@
-import { getBottom, findNode } from './utils.js';
-import { packNodes } from './engine.js';
-import { trackDrag, dragNode } from './drag.js';
+import { packNodes, trackDrag, dragNode, getBottom, findNode } from './index.js';
 
 const params = {
     cellWidth: 60,
@@ -52,7 +50,7 @@ container.style.position = 'relative';
 
 let lastState = state;
 
-trackDrag(container, action => {
+trackDrag(container, (source, action) => {
     if (action.type === 'drag') {
         const node = findNode(
             state,
