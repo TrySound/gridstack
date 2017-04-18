@@ -12,8 +12,7 @@ test('move node from center', () => {
         dragNode({
             params,
             node: { x: 2, y: 2, width: 3, height: 3 },
-            start: { x: 75, y: 75 },
-            end: { x: 125, y: 125 }
+            action: { startX: 75, startY: 75, endX: 125, endY: 125 }
         })
     ).toEqual({
         type: 'move',
@@ -27,8 +26,7 @@ test('resize node from right', () => {
         dragNode({
             params,
             node: { x: 2, y: 2, width: 3, height: 3 },
-            start: { x: 146, y: 135 },
-            end: { x: 160, y: 150 }
+            action: { startX: 146, startY: 135, endX: 160, endY: 150 }
         })
     ).toEqual({
         type: 'resize',
@@ -42,8 +40,7 @@ test('resize node from left', () => {
         dragNode({
             params,
             node: { x: 2, y: 2, width: 3, height: 3 },
-            start: { x: 64, y: 135 },
-            end: { x: 50, y: 150 }
+            action: { startX: 64, startY: 135, endX: 50, endY: 150 }
         })
     ).toEqual({
         type: 'resize',
@@ -57,8 +54,7 @@ test('resize node from left to negative', () => {
         dragNode({
             params,
             node: { x: 1, y: 1, width: 1, height: 1 },
-            start: { x: 34, y: 45 },
-            end: { x: -50, y: 60 }
+            action: { startX: 34, startY: 45, endX: -50, endY: 60 }
         })
     ).toEqual({
         type: 'resize',
@@ -72,8 +68,7 @@ test('resize node from left after right', () => {
         dragNode({
             params,
             node: { x: 1, y: 1, width: 2, height: 1 },
-            start: { x: 34, y: 45 },
-            end: { x: 105, y: 60 }
+            action: { startX: 34, startY: 45, endX: 105, endY: 60 }
         })
     ).toEqual({
         type: 'resize',
@@ -87,8 +82,7 @@ test('resize node from right', () => {
         dragNode({
             params,
             node: { x: 4, y: 0, width: 16, height: 3 },
-            start: { x: 598, y: 40 },
-            end: { x: 230, y: 45 }
+            action: { startX: 598, startY: 40, endX: 230, endY: 45 }
         })
     ).toEqual({
         type: 'resize',
@@ -102,8 +96,7 @@ test('resize node from right before left', () => {
         dragNode({
             params,
             node: { x: 2, y: 1, width: 2, height: 1 },
-            start: { x: 116, y: 45 },
-            end: { x: 45, y: 60 }
+            action: { startX: 116, startY: 45, endX: 45, endY: 60 }
         })
     ).toEqual({
         type: 'resize',
@@ -117,8 +110,7 @@ test('resize node from bottom', () => {
         dragNode({
             params,
             node: { y: 2, x: 2, height: 3, width: 3 },
-            start: { y: 146, x: 135 },
-            end: { y: 160, x: 150 }
+            action: { startX: 135, startY: 146, endX: 150, endY: 160 }
         })
     ).toEqual({
         type: 'resize',
@@ -132,8 +124,7 @@ test('resize node from top', () => {
         dragNode({
             params,
             node: { y: 2, x: 2, height: 3, width: 3 },
-            start: { y: 64, x: 135 },
-            end: { y: 50, x: 150 }
+            action: { startY: 64, startX: 135, endY: 50, endX: 150 }
         })
     ).toEqual({
         type: 'resize',
@@ -147,8 +138,7 @@ test('resize node from top to negative', () => {
         dragNode({
             params,
             node: { y: 1, x: 1, height: 1, width: 1 },
-            start: { y: 34, x: 45 },
-            end: { y: -50, x: 60 }
+            action: { startY: 34, startX: 45, endY: -50, endX: 60 }
         })
     ).toEqual({
         type: 'resize',
@@ -162,8 +152,7 @@ test('resize node from top after bottom', () => {
         dragNode({
             params,
             node: { y: 1, x: 1, height: 2, width: 1 },
-            start: { y: 34, x: 45 },
-            end: { y: 105, x: 60 }
+            action: { startY: 34, startX: 45, endY: 105, endX: 60 }
         })
     ).toEqual({
         type: 'resize',
@@ -177,8 +166,7 @@ test('resize node from bottom', () => {
         dragNode({
             params,
             node: { y: 4, x: 0, height: 16, width: 3 },
-            start: { y: 598, x: 40 },
-            end: { y: 230, x: 45 }
+            action: { startY: 598, startX: 40, endY: 230, endX: 45 }
         })
     ).toEqual({
         type: 'resize',
@@ -192,8 +180,7 @@ test('resize node from bottom before top', () => {
         dragNode({
             params,
             node: { y: 2, x: 1, height: 2, width: 1 },
-            start: { y: 116, x: 45 },
-            end: { y: 45, x: 60 }
+            action: { startY: 116, startX: 45, endY: 45, endX: 60 }
         })
     ).toEqual({
         type: 'resize',

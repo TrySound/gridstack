@@ -49,19 +49,16 @@ let lastState = state;
 
 trackDrag(container, action => {
     if (action.type === 'drag') {
-        const node = findNode(state, Math.floor(action.startX / params.cellWidth), Math.floor(action.startY / params.cellHeight));
+        const node = findNode(
+            state,
+            Math.floor(action.startX / params.cellWidth),
+            Math.floor(action.startY / params.cellHeight)
+        );
         if (node) {
             const drag = dragNode({
                 node,
                 params,
-                start: {
-                    x: action.startX,
-                    y: action.startY
-                },
-                end: {
-                    x: action.x,
-                    y: action.y
-                },
+                action
             });
             lastState = lastState.map(n => n.id === node.id ? drag.node : n);
             lastState = reduce(lastState, node.id);
