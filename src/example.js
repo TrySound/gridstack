@@ -3,8 +3,13 @@ import { packNodes } from './engine.js';
 import { trackDrag, dragNode } from './drag.js';
 
 const params = {
-    cellWidth: 30,
-    cellHeight: 30
+    cellWidth: 60,
+    cellHeight: 60,
+    minWidth: 3,
+    maxWidth: 6,
+    minHeight: 2,
+    maxHeight: 4,
+    containerWidth: 12
 };
 
 const render = (container, state) => {
@@ -29,7 +34,7 @@ const render = (container, state) => {
 
 const reduce = (nodes, updatingId) => {
     return packNodes({
-        hoist: true,
+        maxWidth: params.containerWidth,
         updatingId,
         nodes
     });
