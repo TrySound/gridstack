@@ -19,9 +19,9 @@ type Node = {
 
 **packNodes({ hoise: false, maxWidth: Infinity, upgradeId: null, nodes: Nodes[] })**
 
-**trackDrag(element, action => {})**
+**trackDrag(element, (source: Element, action) => {}, mouseMoveOffset = 6)**
 
-**dragNode({ params, node: Node, start: { x: PX, y: PX }, end: { x: PX, y: PX } })**
+**dragNode({ params, node: Node, action: { startX: PX, startY: PX, endX: PX, endY: PX } })**
 
 **getRight(nodes: Node[])**
 
