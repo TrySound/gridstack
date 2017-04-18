@@ -45,7 +45,11 @@ const trackDrag = (element, dispatch, offset = 3) => {
         document.addEventListener('mouseup', onMouseUp);
     };
     element.addEventListener('mousedown', onMouseDown);
-    return () => element.removeEventListener('mousedown', onMouseDown);
+    return () => {
+        element.removeEventListener('mousedown', onMouseDown);
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    };
 };
 
 export default trackDrag;
