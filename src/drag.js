@@ -71,7 +71,7 @@ const checkResize = (rect, point, offset = 6) => {
     return null;
 };
 
-const resizeNode = (params, node, action, resize) => {
+const resizeNode = (node, params, action, resize) => {
     const nodeX = node.x * params.cellWidth;
     const nodeWidth = node.width * params.cellWidth;
     const endX
@@ -110,7 +110,7 @@ const resizeNode = (params, node, action, resize) => {
     };
 };
 
-const moveNode = (params, node, action) => {
+const moveNode = (node, params, action) => {
     const elementDx = action.endX - action.startX;
     const elementDy = action.endY - action.startY;
     const dx = Math.floor(action.endX / params.cellWidth) - Math.floor(action.startX / params.cellWidth);
@@ -130,7 +130,7 @@ const moveNode = (params, node, action) => {
     };
 };
 
-export const dragNode = ({ params, node, action }) => {
+export const dragNode = ({ node, params, action }) => {
     const rect = {
         x: node.x * params.cellWidth,
         y: node.y * params.cellHeight,
@@ -139,6 +139,6 @@ export const dragNode = ({ params, node, action }) => {
     };
     const resize = checkResize(rect, { x: action.startX, y: action.startY }, params.resizeSize);
     return resize
-        ? resizeNode(params, node, action, resize)
-        : moveNode(params, node, action);
+        ? resizeNode(node, params, action, resize)
+        : moveNode(node, params, action);
 };

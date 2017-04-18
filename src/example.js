@@ -55,11 +55,7 @@ trackDrag(container, action => {
             Math.floor(action.startY / params.cellHeight)
         );
         if (node) {
-            const drag = dragNode({
-                node,
-                params,
-                action
-            });
+            const drag = dragNode({ node, params, action });
             lastState = lastState.map(n => n.id === node.id ? drag.node : n);
             lastState = reduce(lastState, node.id);
             render(container, lastState);
