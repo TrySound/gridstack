@@ -1,8 +1,15 @@
-const checkResize = (rect, point, offset = 6) => {
-    const t = Math.abs(rect.y - point.y) <= offset;
-    const r = Math.abs(rect.x + rect.width - point.x) <= offset;
-    const b = Math.abs(rect.y + rect.height - point.y) <= offset;
-    const l = Math.abs(rect.x - point.x) <= offset;
+const checkResize = (node, params, action) => {
+    const offset = params.resizeSize || 6;
+    const rect = {
+        x: node.x * params.cellWidth,
+        y: node.y * params.cellHeight,
+        width: node.width * params.cellWidth,
+        height: node.height * params.cellHeight
+    }
+    const t = Math.abs(rect.y - action.startY) <= offset;
+    const r = Math.abs(rect.x + rect.width - action.startX) <= offset;
+    const b = Math.abs(rect.y + rect.height - action.startY) <= offset;
+    const l = Math.abs(rect.x - action.startX) <= offset;
     if (t || r || b || l) {
         return {
             t,
@@ -74,13 +81,7 @@ const moveNode = (node, params, action) => {
 };
 
 const dragNode = ({ node, params, action }) => {
-    const rect = {
-        x: node.x * params.cellWidth,
-        y: node.y * params.cellHeight,
-        width: node.width * params.cellWidth,
-        height: node.height * params.cellHeight
-    };
-    const resize = checkResize(rect, { x: action.startX, y: action.startY }, params.resizeSize);
+    const resize = checkResize(node, params, action);
     return resize
         ? resizeNode(node, params, action, resize)
         : moveNode(node, params, action);
