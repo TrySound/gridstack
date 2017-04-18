@@ -55,11 +55,10 @@ export const trackDrag = (element, dispatch, offset = 3) => {
 };
 
 const checkResize = (rect, point, offset = 6) => {
-    const double = offset * 2;
-    const t = Math.abs(rect.y - point.y) <= double;
-    const r = Math.abs(rect.x + rect.width - point.x) <= double;
-    const b = Math.abs(rect.y + rect.height - point.y) <= double;
-    const l = Math.abs(rect.x - point.x) <= double;
+    const t = Math.abs(rect.y - point.y) <= offset;
+    const r = Math.abs(rect.x + rect.width - point.x) <= offset;
+    const b = Math.abs(rect.y + rect.height - point.y) <= offset;
+    const l = Math.abs(rect.x - point.x) <= offset;
     if (t || r || b || l) {
         return {
             t,

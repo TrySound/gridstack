@@ -188,3 +188,17 @@ test('resize node from bottom before top', () => {
         node: { y: 2, x: 1, height: 1, width: 1 }
     });
 });
+
+test('move node from right bottom with more then 6 resize size', () => {
+    expect(
+        dragNode({
+            params,
+            node: { y: 1, x: 1, height: 1, width: 1 },
+            action: { startY: 53, startX: 53, endY: 28, endX: 28 }
+        })
+    ).toEqual({
+        type: 'move',
+        element: { y: 5, x: 5, height: 30, width: 30 },
+        node: { y: 0, x: 0, height: 1, width: 1 }
+    });
+});
