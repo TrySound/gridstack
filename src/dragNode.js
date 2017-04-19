@@ -5,7 +5,7 @@ const checkResize = (node, params, action) => {
         y: node.y * params.cellHeight,
         width: node.width * params.cellWidth,
         height: node.height * params.cellHeight
-    }
+    };
     const t = Math.abs(rect.y - action.startY) <= offset;
     const r = Math.abs(rect.x + rect.width - action.startX) <= offset;
     const b = Math.abs(rect.y + rect.height - action.startY) <= offset;
