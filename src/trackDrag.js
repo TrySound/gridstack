@@ -1,24 +1,28 @@
 const getMouse = (rect, event) => [event.clientX - rect.left, event.clientY - rect.top];
 
-const trackDrag = (element, dispatch, mouseMoveOffset = 3) => {
+const trackDrag = ({
+    container,
+    mouseMoveOffset = 3,
+    validateStartTarget = () => true,
+    dispatch
+}) => {
     const onMouseDown = downEvent => {
-        const startRect = element.getBoundingClientRect();
+        const startRect = container.getBoundingClientRect();
         const [startX, startY] = getMouse(startRect, downEvent);
-        const source = downEvent.target;
-
-        dispatch(source, {
-            type: 'start',
-            x: startX,
-            y: startY
-        });
+        const valid = validateStartTarget(downEvent.target);
+        if (valid) {
+            dispatch({
+                type: 'start',
+                x: startX,
+                y: startY
+            });
+        }
 
         const onMouseMove = e => {
             const [endX, endY] = getMouse(startRect, e);
-            const dx = endX - startX;
-            const dy = endY - startY;
-            if (mouseMoveOffset < Math.abs(dx) || mouseMoveOffset < Math.abs(dy)) {
+            if (mouseMoveOffset < Math.abs(endX - startX) || mouseMoveOffset < Math.abs(endY - startY)) {
                 e.preventDefault();
-                dispatch(source, {
+                dispatch({
                     type: 'drag',
                     startX,
                     startY,
@@ -30,7 +34,7 @@ const trackDrag = (element, dispatch, mouseMoveOffset = 3) => {
 
         const onMouseUp = e => {
             const [endX, endY] = getMouse(startRect, e);
-            dispatch(source, {
+            dispatch({
                 type: 'end',
                 startX,
                 startY,
@@ -41,14 +45,16 @@ const trackDrag = (element, dispatch, mouseMoveOffset = 3) => {
             document.removeEventListener('mouseup', onMouseUp);
         };
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
+        if (valid) {
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
     };
 
-    element.addEventListener('mousedown', onMouseDown);
+    container.addEventListener('mousedown', onMouseDown);
 
     return () => {
-        element.removeEventListener('mousedown', onMouseDown);
+        container.removeEventListener('mousedown', onMouseDown);
     };
 };
 

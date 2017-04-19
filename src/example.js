@@ -50,22 +50,25 @@ container.style.position = 'relative';
 
 let lastState = state;
 
-trackDrag(container, (source, action) => {
-    if (action.type === 'drag') {
-        const node = findNode(
-            state,
-            Math.floor(action.startX / params.cellWidth),
-            Math.floor(action.startY / params.cellHeight)
-        );
-        if (node) {
-            const drag = dragNode({ node, params, action });
-            lastState = lastState.map(n => n.id === node.id ? drag.node : n);
-            lastState = reduce(lastState, node.id);
-            render(container, lastState);
+trackDrag({
+    container,
+    dispatch: action => {
+        if (action.type === 'drag') {
+            const node = findNode(
+                state,
+                Math.floor(action.startX / params.cellWidth),
+                Math.floor(action.startY / params.cellHeight)
+            );
+            if (node) {
+                const drag = dragNode({ node, params, action });
+                lastState = lastState.map(n => n.id === node.id ? drag.node : n);
+                lastState = reduce(lastState, node.id);
+                render(container, lastState);
+            }
         }
-    }
-    if (action.type === 'end') {
-        state = lastState;
+        if (action.type === 'end') {
+            state = lastState;
+        }
     }
 });
 
