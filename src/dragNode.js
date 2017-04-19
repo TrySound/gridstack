@@ -1,41 +1,18 @@
-const checkResize = (node, params, action) => {
-    const offset = params.resizeSize || 6;
-    const rect = {
-        x: node.x * params.cellWidth,
-        y: node.y * params.cellHeight,
-        width: node.width * params.cellWidth,
-        height: node.height * params.cellHeight
-    };
-    const t = Math.abs(rect.y - action.startY) <= offset;
-    const r = Math.abs(rect.x + rect.width - action.startX) <= offset;
-    const b = Math.abs(rect.y + rect.height - action.startY) <= offset;
-    const l = Math.abs(rect.x - action.startX) <= offset;
-    if (t || r || b || l) {
-        return {
-            t,
-            r,
-            b,
-            l
-        };
-    }
-    return null;
-};
-
 const resizeNode = (node, params, action, resize) => {
     const nodeX = node.x * params.cellWidth;
     const nodeWidth = node.width * params.cellWidth;
     const endX
-        = resize.l
+        = resize.left
         ? Math.min(Math.max(action.startX - nodeX, action.endX), action.startX - params.cellWidth + nodeWidth)
-        : resize.r
+        : resize.right
         ? Math.max(action.startX + params.cellWidth - nodeWidth, action.endX)
         : action.startX;
     const nodeY = node.y * params.cellHeight;
     const nodeHeight = node.height * params.cellHeight;
     const endY
-        = resize.t
+        = resize.top
         ? Math.min(Math.max(action.startY - nodeY, action.endY), action.startY - params.cellHeight + nodeHeight)
-        : resize.b
+        : resize.bottom
         ? Math.max(action.startY + params.cellHeight - nodeHeight, action.endY)
         : action.startY;
 
@@ -46,16 +23,16 @@ const resizeNode = (node, params, action, resize) => {
     return {
         type: 'resize',
         element: {
-            x: nodeX + (resize.l ? elementDx : 0),
-            y: nodeY + (resize.t ? elementDy : 0),
-            width: nodeWidth + (resize.l ? -elementDx : resize.r ? elementDx : 0),
-            height: nodeHeight + (resize.t ? -elementDy : resize.b ? elementDy : 0)
+            x: nodeX + (resize.left ? elementDx : 0),
+            y: nodeY + (resize.top ? elementDy : 0),
+            width: nodeWidth + (resize.left ? -elementDx : resize.right ? elementDx : 0),
+            height: nodeHeight + (resize.top ? -elementDy : resize.bottom ? elementDy : 0)
         },
         node: Object.assign({}, node, {
-            x: node.x + (resize.l ? nodeDx : 0),
-            y: node.y + (resize.t ? nodeDy : 0),
-            width: node.width + (resize.l ? -nodeDx : resize.r ? nodeDx : 0),
-            height: node.height + (resize.t ? -nodeDy : resize.b ? nodeDy : 0)
+            x: node.x + (resize.left ? nodeDx : 0),
+            y: node.y + (resize.top ? nodeDy : 0),
+            width: node.width + (resize.left ? -nodeDx : resize.right ? nodeDx : 0),
+            height: node.height + (resize.top ? -nodeDy : resize.bottom ? nodeDy : 0)
         })
     };
 };
@@ -81,10 +58,25 @@ const moveNode = (node, params, action) => {
 };
 
 const dragNode = ({ node, params, action }) => {
-    const resize = checkResize(node, params, action);
-    return resize
-        ? resizeNode(node, params, action, resize)
-        : moveNode(node, params, action);
+    const resize = Object.assign({ width: 6 }, params.resize);
+    const nodeX = node.x * params.cellWidth;
+    const nodeY = node.y * params.cellHeight;
+    const nodeWidth = (node.x + node.width) * params.cellWidth;
+    const nodeHeight = (node.y + node.height) * params.cellHeight;
+    const top = Math.abs(nodeY - action.startY) <= resize.width;
+    const right = Math.abs(nodeWidth - action.startX) <= resize.width;
+    const bottom = Math.abs(nodeHeight - action.startY) <= resize.width;
+    const left = Math.abs(nodeX - action.startX) <= resize.width;
+
+    if (top || right || bottom || left) {
+        return resizeNode(node, params, action, {
+            top: top && resize.top,
+            right: right && resize.right,
+            bottom: bottom && resize.bottom,
+            left: left && resize.left
+        });
+    }
+    return moveNode(node, params, action);
 };
 
 export default dragNode;

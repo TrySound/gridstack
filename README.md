@@ -17,9 +17,9 @@ type Node = {
 };
 ```
 
-**packNodes({ hoise: false, maxWidth: Infinity, upgradeId: null, nodes: Nodes[] })**
+**packNodes({ hoist: false, maxWidth: Infinity, upgradeId: null, nodes: Nodes[] })**
 
-**trackDrag(element, (source: Element, action) => {}, mouseMoveOffset = 6)**
+**trackDrag({ container, mouseMoveOffset = 6, validateStartTarget: Element => true, action => {} })**
 
 **dragNode({ params, node: Node, action: { startX: PX, startY: PX, endX: PX, endY: PX } })**
 

@@ -7,7 +7,13 @@ const params = {
     maxWidth: 6,
     minHeight: 2,
     maxHeight: 4,
-    containerWidth: 12
+    containerWidth: 12,
+    resize: {
+        top: true,
+        right: true,
+        bottom: true,
+        left: true
+    }
 };
 
 const render = (container, state) => {
