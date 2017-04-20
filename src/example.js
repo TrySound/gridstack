@@ -45,9 +45,12 @@ const reduce = (nodes, updatingId) => {
 };
 
 let state = [
-    { id: 2, x: 2, y: 4, width: 3, height: 3, static: true },
-    { id: 1, x: 4, y: 0, width: 3, height: 3 },
-    { id: 3, x: 3, y: 1, width: 3, height: 3 }
+    { id: 1, x: 2, y: 4, width: 3, height: 3, static: true },
+    { id: 2, x: 8, y: 7, width: 3, height: 3, static: true },
+    { id: 3, x: 4, y: 0, width: 3, height: 3 },
+    { id: 4, x: 9, y: 0, width: 3, height: 3 },
+    { id: 5, x: 1, y: 0, width: 3, height: 3 },
+    { id: 6, x: 3, y: 1, width: 3, height: 3 }
 ];
 
 const container = document.createElement('div');
