@@ -1,10 +1,7 @@
 /* eslint-env jest */
 import dragNode from './dragNode.js';
 
-const getParams = (extension = {}) => Object.assign({}, {
-    cellWidth: 30,
-    cellHeight: 30
-}, extension);
+const getParams = extension => Object.assign({}, { cellWidth: 30, cellHeight: 30 }, extension);
 
 test('move node from center', () => {
     expect(
@@ -287,5 +284,47 @@ test('resize node according customized resize width', () => {
         type: 'resize',
         element: { x: 30, y: 30, width: 35, height: 35 },
         node: { x: 1, y: 1, width: 1, height: 1 }
+    });
+});
+
+test('null if start point is out of node', () => {
+    expect(
+        dragNode({
+            params: getParams(),
+            node: { x: 1, y: 1, width: 1, height: 1 },
+            action: { startX: 90, startY: 90, endX: 45, endY: 45 }
+        })
+    ).toEqual(null);
+});
+
+test('null if start point is out of padded area', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                padding: 10
+            }),
+            node: { x: 1, y: 1, width: 1, height: 1 },
+            action: { startX: 35, startY: 35, endX: 45, endY: 45 }
+        })
+    ).toEqual(null);
+});
+
+test('resize node with padding', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                padding: 10,
+                resize: {
+                    right: true,
+                    bottom: true
+                }
+            }),
+            node: { x: 1, y: 1, width: 2, height: 2 },
+            action: { startX: 76, startY: 76, endX: 90, endY: 90 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 30, y: 30, width: 74, height: 74 },
+        node: { x: 1, y: 1, width: 3, height: 3 }
     });
 });
