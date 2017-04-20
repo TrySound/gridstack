@@ -38,17 +38,17 @@ test('resize node from right with enabled right resize', () => {
     });
 });
 
-test('not resize node from right', () => {
+test('move node from right with disabled right resize', () => {
     expect(
         dragNode({
             params: getParams(),
             node: { x: 2, y: 2, width: 3, height: 3 },
-            action: { startX: 146, startY: 135, endX: 160, endY: 150 }
+            action: { startX: 146, startY: 146, endX: 170, endY: 170 }
         })
     ).toEqual({
-        type: 'resize',
-        element: { x: 60, y: 60, width: 90, height: 90 },
-        node: { x: 2, y: 2, width: 3, height: 3 }
+        type: 'move',
+        element: { x: 84, y: 84, width: 90, height: 90 },
+        node: { x: 3, y: 3, width: 3, height: 3 }
     });
 });
 
@@ -70,17 +70,17 @@ test('resize node from left with enabled left resize', () => {
     });
 });
 
-test('not resize node from left', () => {
+test('move node from left with disabled left resize', () => {
     expect(
         dragNode({
             params: getParams(),
             node: { x: 2, y: 2, width: 3, height: 3 },
-            action: { startX: 64, startY: 135, endX: 50, endY: 150 }
+            action: { startX: 64, startY: 64, endX: 30, endY: 30 }
         })
     ).toEqual({
-        type: 'resize',
-        element: { x: 60, y: 60, width: 90, height: 90 },
-        node: { x: 2, y: 2, width: 3, height: 3 }
+        type: 'move',
+        element: { x: 26, y: 26, width: 90, height: 90 },
+        node: { x: 1, y: 1, width: 3, height: 3 }
     });
 });
 
@@ -156,17 +156,17 @@ test('resize node from bottom with enabled bottom resize', () => {
     });
 });
 
-test('not resize node from bottom', () => {
+test('move node from bottom with disabled bottom resize', () => {
     expect(
         dragNode({
             params: getParams(),
             node: { y: 2, x: 2, height: 3, width: 3 },
-            action: { startX: 135, startY: 146, endX: 150, endY: 160 }
+            action: { startX: 146, startY: 146, endX: 170, endY: 170 }
         })
     ).toEqual({
-        type: 'resize',
-        element: { y: 60, x: 60, height: 90, width: 90 },
-        node: { y: 2, x: 2, height: 3, width: 3 }
+        type: 'move',
+        element: { y: 84, x: 84, height: 90, width: 90 },
+        node: { y: 3, x: 3, height: 3, width: 3 }
     });
 });
 
@@ -188,17 +188,17 @@ test('resize node from top with enabled top resize', () => {
     });
 });
 
-test('not resize node from top', () => {
+test('move node from top with disabled top resize', () => {
     expect(
         dragNode({
             params: getParams(),
             node: { y: 2, x: 2, height: 3, width: 3 },
-            action: { startY: 64, startX: 135, endY: 50, endX: 150 }
+            action: { startY: 64, startX: 64, endY: 30, endX: 30 }
         })
     ).toEqual({
-        type: 'resize',
-        element: { y: 60, x: 60, height: 90, width: 90 },
-        node: { y: 2, x: 2, height: 3, width: 3 }
+        type: 'move',
+        element: { y: 26, x: 26, height: 90, width: 90 },
+        node: { y: 1, x: 1, height: 3, width: 3 }
     });
 });
 

@@ -63,18 +63,13 @@ const dragNode = ({ node, params, action }) => {
     const nodeY = node.y * params.cellHeight;
     const nodeWidth = (node.x + node.width) * params.cellWidth;
     const nodeHeight = (node.y + node.height) * params.cellHeight;
-    const top = Math.abs(nodeY - action.startY) <= resize.width;
-    const right = Math.abs(nodeWidth - action.startX) <= resize.width;
-    const bottom = Math.abs(nodeHeight - action.startY) <= resize.width;
-    const left = Math.abs(nodeX - action.startX) <= resize.width;
+    const top = resize.top && Math.abs(nodeY - action.startY) <= resize.width;
+    const right = resize.right && Math.abs(nodeWidth - action.startX) <= resize.width;
+    const bottom = resize.bottom && Math.abs(nodeHeight - action.startY) <= resize.width;
+    const left = resize.left && Math.abs(nodeX - action.startX) <= resize.width;
 
     if (top || right || bottom || left) {
-        return resizeNode(node, params, action, {
-            top: top && resize.top,
-            right: right && resize.right,
-            bottom: bottom && resize.bottom,
-            left: left && resize.left
-        });
+        return resizeNode(node, params, action, { top, right, bottom, left });
     }
     return moveNode(node, params, action);
 };
