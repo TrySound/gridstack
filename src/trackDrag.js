@@ -1,4 +1,7 @@
-const getMouse = (rect, event) => [event.clientX - rect.left, event.clientY - rect.top];
+const getMouse = (element, event) => {
+    const rect = element.getBoundingClientRect();
+    return [event.clientX - rect.left, event.clientY - rect.top];
+};
 
 const trackDrag = ({
     container,
@@ -7,8 +10,7 @@ const trackDrag = ({
     dispatch
 }) => {
     const onMouseDown = downEvent => {
-        const startRect = container.getBoundingClientRect();
-        const [startX, startY] = getMouse(startRect, downEvent);
+        const [startX, startY] = getMouse(container, downEvent);
         const valid = validateStartTarget(downEvent.target);
         if (valid) {
             dispatch({
@@ -19,7 +21,7 @@ const trackDrag = ({
         }
 
         const onMouseMove = e => {
-            const [endX, endY] = getMouse(startRect, e);
+            const [endX, endY] = getMouse(container, e);
             if (mouseMoveOffset < Math.abs(endX - startX) || mouseMoveOffset < Math.abs(endY - startY)) {
                 e.preventDefault();
                 dispatch({
@@ -33,7 +35,7 @@ const trackDrag = ({
         };
 
         const onMouseUp = e => {
-            const [endX, endY] = getMouse(startRect, e);
+            const [endX, endY] = getMouse(container, e);
             dispatch({
                 type: 'end',
                 startX,
