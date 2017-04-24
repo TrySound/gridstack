@@ -364,7 +364,7 @@ test('resize node with min width from left', () => {
         type: 'resize',
         element: { x: 90, y: 30, width: 60, height: 120 },
         node: { x: 3, y: 1, width: 2, height: 4 }
-    })
+    });
 });
 
 test('resize node with min height from bottom', () => {
@@ -383,7 +383,7 @@ test('resize node with min height from bottom', () => {
         type: 'resize',
         element: { x: 30, y: 30, width: 120, height: 60 },
         node: { x: 1, y: 1, width: 4, height: 2 }
-    })
+    });
 });
 
 test('resize node with min height from top', () => {
