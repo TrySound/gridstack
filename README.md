@@ -10,38 +10,82 @@ Packable layout library
 ```js
 type Node = {
     id: number | string,
+    // cells
     x: number,
     y: number,
     width: number,
     height: number
-};
+}
 ```
+
+### packNodes
+
+```js
+packNodes({
+    hoist: false,
+    maxWidth: Infinity, // cells
+    updatingId: null,
+    nodes: Nodes[]
+}): Nodes[]
+```
+
+### trackDrag
+
+```js
+trackDrag({
+    container: HTMLElement,
+    mouseMoveOffset = 3, // pixels
+    dispatch: (action, startTarget: HTMLElement) => void
+})
+```
+
+### dragNode
 
 ```js
 type Params = {
-    cellWidth: Number,
-    cellHeight: Number,
+    cellWidth: Number, // pixels
+    cellHeight: Number, // pixels
+    minWidth?: 1, // cell
+    minHeight?: 1, // cell
+    padding?: 0, // pixels
     resize?: {
-        width: 6,
+        width: 6, // pixels
         top: false,
         right: false,
         bottom: false,
         left: false
     }
-};
+}
 ```
 
-**packNodes({ hoist: false, maxWidth: Infinity, upgradeId: null, nodes: Nodes[] })**
+```js
+type DragResult = null | {
+    type: 'resize' | 'move',
+    // pixels
+    element: { x: number, y: number, width: number, height: number },
+    node: Node
+}
+```
 
-**trackDrag({ container, mouseMoveOffset = 6, validateStartTarget: Element => true, action => {} })**
+```js
+dragNode({
+    params: Params,
+    node: Node,
+    // pixels
+    action: { startX: number, startY: number, endX: number, endY: number }
+}): DragResult
+```
 
-**dragNode({ params: Params, node: Node, action: { startX: PX, startY: PX, endX: PX, endY: PX } })**
+### utils
 
-**getRight(nodes: Node[])**
+```js
+getRight(nodes: Node[]): number // cells
 
-**getBottom(nodes: Node[])**
+getBottom(nodes: Node[]): number // cells
 
-**findNode(nodes: Node[], x, y)**
+// takes cells
+findNode(nodes: Node[], x: number, y: number): Node
+```
 
 ## License
 
