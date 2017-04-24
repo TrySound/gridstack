@@ -6,19 +6,15 @@ const getMouse = (element, event) => {
 const trackDrag = ({
     container,
     mouseMoveOffset = 3,
-    validateStartTarget = () => true,
     dispatch
 }) => {
     const onMouseDown = downEvent => {
         const [startX, startY] = getMouse(container, downEvent);
-        const valid = validateStartTarget(downEvent.target);
-        if (valid) {
-            dispatch({
-                type: 'start',
-                x: startX,
-                y: startY
-            });
-        }
+        dispatch({
+            type: 'start',
+            x: startX,
+            y: startY
+        }, downEvent.target);
 
         const onMouseMove = e => {
             const [endX, endY] = getMouse(container, e);
@@ -30,7 +26,7 @@ const trackDrag = ({
                     startY,
                     endX,
                     endY
-                });
+                }, downEvent.target);
             }
         };
 
@@ -42,15 +38,13 @@ const trackDrag = ({
                 startY,
                 endX,
                 endY
-            });
+            }, downEvent.target);
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
 
-        if (valid) {
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-        }
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
     };
 
     container.addEventListener('mousedown', onMouseDown);
