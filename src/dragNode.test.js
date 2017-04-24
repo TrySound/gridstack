@@ -81,60 +81,6 @@ test('move node from left with disabled left resize', () => {
     });
 });
 
-test('resize node from left to negative', () => {
-    expect(
-        dragNode({
-            params: getParams({
-                resize: {
-                    left: true
-                }
-            }),
-            node: { x: 1, y: 1, width: 1, height: 1 },
-            action: { startX: 34, startY: 45, endX: -50, endY: 60 }
-        })
-    ).toEqual({
-        type: 'resize',
-        element: { x: 0, y: 30, width: 60, height: 30 },
-        node: { x: 0, y: 1, width: 2, height: 1 }
-    });
-});
-
-test('resize node from left after right', () => {
-    expect(
-        dragNode({
-            params: getParams({
-                resize: {
-                    left: true
-                }
-            }),
-            node: { x: 1, y: 1, width: 2, height: 1 },
-            action: { startX: 34, startY: 45, endX: 105, endY: 60 }
-        })
-    ).toEqual({
-        type: 'resize',
-        element: { x: 60, y: 30, width: 30, height: 30 },
-        node: { x: 2, y: 1, width: 1, height: 1 }
-    });
-});
-
-test('resize node from right before left', () => {
-    expect(
-        dragNode({
-            params: getParams({
-                resize: {
-                    right: true
-                }
-            }),
-            node: { x: 2, y: 1, width: 2, height: 1 },
-            action: { startX: 116, startY: 45, endX: 45, endY: 60 }
-        })
-    ).toEqual({
-        type: 'resize',
-        element: { x: 60, y: 30, width: 30, height: 30 },
-        node: { x: 2, y: 1, width: 1, height: 1 }
-    });
-});
-
 test('resize node from bottom with enabled bottom resize', () => {
     expect(
         dragNode({
@@ -199,57 +145,60 @@ test('move node from top with disabled top resize', () => {
     });
 });
 
-test('resize node from top to negative', () => {
+test('resize node from left after right and from top after bottom', () => {
     expect(
         dragNode({
             params: getParams({
                 resize: {
+                    left: true,
                     top: true
                 }
             }),
-            node: { y: 1, x: 1, height: 1, width: 1 },
-            action: { startY: 34, startX: 45, endY: -50, endX: 60 }
+            node: { x: 1, y: 1, width: 2, height: 2 },
+            action: { startX: 34, startY: 34, endX: 105, endY: 105 }
         })
     ).toEqual({
         type: 'resize',
-        element: { y: 0, x: 30, height: 60, width: 30 },
-        node: { y: 0, x: 1, height: 2, width: 1 }
+        element: { x: 60, y: 60, width: 30, height: 30 },
+        node: { x: 2, y: 2, width: 1, height: 1 }
     });
 });
 
-test('resize node from top after bottom', () => {
+test('resize node from left to negative and from top to negative', () => {
     expect(
         dragNode({
             params: getParams({
                 resize: {
+                    left: true,
                     top: true
                 }
             }),
-            node: { y: 1, x: 1, height: 2, width: 1 },
-            action: { startY: 34, startX: 45, endY: 105, endX: 60 }
+            node: { x: 1, y: 1, width: 1, height: 1 },
+            action: { startX: 34, startY: 34, endX: -50, endY: -50 }
         })
     ).toEqual({
         type: 'resize',
-        element: { y: 60, x: 30, height: 30, width: 30 },
-        node: { y: 2, x: 1, height: 1, width: 1 }
+        element: { x: 0, y: 0, width: 60, height: 60 },
+        node: { x: 0, y: 0, width: 2, height: 2 }
     });
 });
 
-test('resize node from bottom before top', () => {
+test('resize node from right before left and from bottom before top', () => {
     expect(
         dragNode({
             params: getParams({
                 resize: {
+                    right: true,
                     bottom: true
                 }
             }),
-            node: { y: 2, x: 1, height: 2, width: 1 },
-            action: { startY: 116, startX: 45, endY: 45, endX: 60 }
+            node: { x: 2, y: 2, width: 2, height: 2 },
+            action: { startX: 116, startY: 116, endX: 45, endY: 45 }
         })
     ).toEqual({
         type: 'resize',
-        element: { y: 60, x: 30, height: 30, width: 30 },
-        node: { y: 2, x: 1, height: 1, width: 1 }
+        element: { x: 60, y: 60, width: 30, height: 30 },
+        node: { x: 2, y: 2, width: 1, height: 1 }
     });
 });
 
@@ -329,50 +278,14 @@ test('resize node with padding', () => {
     });
 });
 
-test('resize node with min width from right', () => {
+test('resize node with min width from right and bottom', () => {
     expect(
         dragNode({
             params: getParams({
                 minWidth: 2,
-                resize: {
-                    right: true
-                }
-            }),
-            node: { x: 1, y: 1, width: 4, height: 4 },
-            action: { startX: 146, startY: 146, endX: 50, endY: 50 }
-        })
-    ).toEqual({
-        type: 'resize',
-        element: { x: 30, y: 30, width: 60, height: 120 },
-        node: { x: 1, y: 1, width: 2, height: 4 }
-    });
-});
-
-test('resize node with min width from left', () => {
-    expect(
-        dragNode({
-            params: getParams({
-                minWidth: 2,
-                resize: {
-                    left: true
-                }
-            }),
-            node: { x: 1, y: 1, width: 4, height: 4 },
-            action: { startX: 34, startY: 34, endX: 150, endY: 150 }
-        })
-    ).toEqual({
-        type: 'resize',
-        element: { x: 90, y: 30, width: 60, height: 120 },
-        node: { x: 3, y: 1, width: 2, height: 4 }
-    });
-});
-
-test('resize node with min height from bottom', () => {
-    expect(
-        dragNode({
-            params: getParams({
                 minHeight: 2,
                 resize: {
+                    right: true,
                     bottom: true
                 }
             }),
@@ -381,17 +294,19 @@ test('resize node with min height from bottom', () => {
         })
     ).toEqual({
         type: 'resize',
-        element: { x: 30, y: 30, width: 120, height: 60 },
-        node: { x: 1, y: 1, width: 4, height: 2 }
+        element: { x: 30, y: 30, width: 60, height: 60 },
+        node: { x: 1, y: 1, width: 2, height: 2 }
     });
 });
 
-test('resize node with min height from top', () => {
+test('resize node with min width from left and top', () => {
     expect(
         dragNode({
             params: getParams({
+                minWidth: 2,
                 minHeight: 2,
                 resize: {
+                    left: true,
                     top: true
                 }
             }),
@@ -400,7 +315,7 @@ test('resize node with min height from top', () => {
         })
     ).toEqual({
         type: 'resize',
-        element: { x: 30, y: 90, width: 120, height: 60 },
-        node: { x: 1, y: 3, width: 4, height: 2 }
+        element: { x: 90, y: 90, width: 60, height: 60 },
+        node: { x: 3, y: 3, width: 2, height: 2 }
     });
 });
