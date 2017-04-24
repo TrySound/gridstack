@@ -10,15 +10,15 @@ const resizeNode = (node, params, action, resize) => {
 
     const endX
         = resize.left
-        ? Math.min(Math.max(action.startX - nodeX, action.endX), action.startX - cellWidth + nodeWidth)
+        ? Math.max(action.startX - nodeX, action.endX)
         : resize.right
-        ? Math.max(action.startX + cellWidth - nodeWidth, action.endX)
+        ? action.endX
         : action.startX;
     const endY
         = resize.top
-        ? Math.min(Math.max(action.startY - nodeY, action.endY), action.startY - cellHeight + nodeHeight)
+        ? Math.max(action.startY - nodeY, action.endY)
         : resize.bottom
-        ? Math.max(action.startY + cellHeight - nodeHeight, action.endY)
+        ? action.endY
         : action.startY;
 
     const elementDx = endX - action.startX;
@@ -30,14 +30,14 @@ const resizeNode = (node, params, action, resize) => {
         element: {
             x: Math.min(maxX * cellWidth, nodeX + (resize.left ? elementDx : 0)),
             y: Math.min(maxY * cellHeight, nodeY + (resize.top ? elementDy : 0)),
-            width: Math.max(minWidth * cellWidth, nodeWidth + (resize.left ? -elementDx : resize.right ? elementDx : 0)),
-            height: Math.max(minHeight * cellHeight, nodeHeight + (resize.top ? -elementDy : resize.bottom ? elementDy : 0))
+            width: Math.max(minWidth * cellWidth, nodeWidth + (resize.left ? -1 : resize.right ? 1 : 0) * elementDx),
+            height: Math.max(minHeight * cellHeight, nodeHeight + (resize.top ? -1 : resize.bottom ? 1 : 0) * elementDy)
         },
         node: Object.assign({}, node, {
             x: Math.min(maxX, node.x + (resize.left ? nodeDx : 0)),
             y: Math.min(maxY, node.y + (resize.top ? nodeDy : 0)),
-            width: Math.max(minWidth, node.width + (resize.left ? -nodeDx : resize.right ? nodeDx : 0)),
-            height: Math.max(minHeight, node.height + (resize.top ? -nodeDy : resize.bottom ? nodeDy : 0))
+            width: Math.max(minWidth, node.width + (resize.left ? -1 : resize.right ? 1 : 0) * nodeDx),
+            height: Math.max(minHeight, node.height + (resize.top ? -1 : resize.bottom ? 1 : 0) * nodeDy)
         })
     };
 };
