@@ -1,38 +1,43 @@
 const resizeNode = (node, params, action, resize) => {
-    const nodeX = node.x * params.cellWidth;
-    const nodeWidth = node.width * params.cellWidth;
+    const { cellWidth, cellHeight, minWidth = 1, minHeight = 1 } = params;
+    const nodeX = node.x * cellWidth;
+    const nodeWidth = node.width * cellWidth;
+    const nodeY = node.y * cellHeight;
+    const nodeHeight = node.height * cellHeight;
+
+    const maxX = node.x + node.width - minWidth;
+    const maxY = node.y + node.height - minHeight;
+
     const endX
         = resize.left
-        ? Math.min(Math.max(action.startX - nodeX, action.endX), action.startX - params.cellWidth + nodeWidth)
+        ? Math.min(Math.max(action.startX - nodeX, action.endX), action.startX - cellWidth + nodeWidth)
         : resize.right
-        ? Math.max(action.startX + params.cellWidth - nodeWidth, action.endX)
+        ? Math.max(action.startX + cellWidth - nodeWidth, action.endX)
         : action.startX;
-    const nodeY = node.y * params.cellHeight;
-    const nodeHeight = node.height * params.cellHeight;
     const endY
         = resize.top
-        ? Math.min(Math.max(action.startY - nodeY, action.endY), action.startY - params.cellHeight + nodeHeight)
+        ? Math.min(Math.max(action.startY - nodeY, action.endY), action.startY - cellHeight + nodeHeight)
         : resize.bottom
-        ? Math.max(action.startY + params.cellHeight - nodeHeight, action.endY)
+        ? Math.max(action.startY + cellHeight - nodeHeight, action.endY)
         : action.startY;
 
     const elementDx = endX - action.startX;
     const elementDy = endY - action.startY;
-    const nodeDx = Math.floor(endX / params.cellWidth) - Math.floor(action.startX / params.cellWidth);
-    const nodeDy = Math.floor(endY / params.cellHeight) - Math.floor(action.startY / params.cellHeight);
+    const nodeDx = Math.floor(endX / cellWidth) - Math.floor(action.startX / cellWidth);
+    const nodeDy = Math.floor(endY / cellHeight) - Math.floor(action.startY / cellHeight);
     return {
         type: 'resize',
         element: {
-            x: nodeX + (resize.left ? elementDx : 0),
-            y: nodeY + (resize.top ? elementDy : 0),
-            width: nodeWidth + (resize.left ? -elementDx : resize.right ? elementDx : 0),
-            height: nodeHeight + (resize.top ? -elementDy : resize.bottom ? elementDy : 0)
+            x: Math.min(maxX * cellWidth, nodeX + (resize.left ? elementDx : 0)),
+            y: Math.min(maxY * cellHeight, nodeY + (resize.top ? elementDy : 0)),
+            width: Math.max(minWidth * cellWidth, nodeWidth + (resize.left ? -elementDx : resize.right ? elementDx : 0)),
+            height: Math.max(minHeight * cellHeight, nodeHeight + (resize.top ? -elementDy : resize.bottom ? elementDy : 0))
         },
         node: Object.assign({}, node, {
-            x: node.x + (resize.left ? nodeDx : 0),
-            y: node.y + (resize.top ? nodeDy : 0),
-            width: node.width + (resize.left ? -nodeDx : resize.right ? nodeDx : 0),
-            height: node.height + (resize.top ? -nodeDy : resize.bottom ? nodeDy : 0)
+            x: Math.min(maxX, node.x + (resize.left ? nodeDx : 0)),
+            y: Math.min(maxY, node.y + (resize.top ? nodeDy : 0)),
+            width: Math.max(minWidth, node.width + (resize.left ? -nodeDx : resize.right ? nodeDx : 0)),
+            height: Math.max(minHeight, node.height + (resize.top ? -nodeDy : resize.bottom ? nodeDy : 0))
         })
     };
 };

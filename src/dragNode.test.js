@@ -328,3 +328,79 @@ test('resize node with padding', () => {
         node: { x: 1, y: 1, width: 3, height: 3 }
     });
 });
+
+test('resize node with min width from right', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                minWidth: 2,
+                resize: {
+                    right: true
+                }
+            }),
+            node: { x: 1, y: 1, width: 4, height: 4 },
+            action: { startX: 146, startY: 146, endX: 50, endY: 50 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 30, y: 30, width: 60, height: 120 },
+        node: { x: 1, y: 1, width: 2, height: 4 }
+    });
+});
+
+test('resize node with min width from left', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                minWidth: 2,
+                resize: {
+                    left: true
+                }
+            }),
+            node: { x: 1, y: 1, width: 4, height: 4 },
+            action: { startX: 34, startY: 34, endX: 150, endY: 150 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 90, y: 30, width: 60, height: 120 },
+        node: { x: 3, y: 1, width: 2, height: 4 }
+    })
+});
+
+test('resize node with min height from bottom', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                minHeight: 2,
+                resize: {
+                    bottom: true
+                }
+            }),
+            node: { x: 1, y: 1, width: 4, height: 4 },
+            action: { startX: 146, startY: 146, endX: 50, endY: 50 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 30, y: 30, width: 120, height: 60 },
+        node: { x: 1, y: 1, width: 4, height: 2 }
+    })
+});
+
+test('resize node with min height from top', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                minHeight: 2,
+                resize: {
+                    top: true
+                }
+            }),
+            node: { x: 1, y: 1, width: 4, height: 4 },
+            action: { startX: 34, startY: 34, endX: 150, endY: 150 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 30, y: 90, width: 120, height: 60 },
+        node: { x: 1, y: 3, width: 4, height: 2 }
+    });
+});
