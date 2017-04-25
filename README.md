@@ -46,7 +46,9 @@ type Params = {
     cellWidth: Number, // pixels
     cellHeight: Number, // pixels
     minWidth?: 1, // cell
+    maxWidth?: Infinity, // cell
     minHeight?: 1, // cell
+    maxHeight?: Infinity, // cell
     padding?: 0, // pixels
     resize?: {
         width: 6, // pixels
