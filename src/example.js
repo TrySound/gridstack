@@ -38,7 +38,7 @@ const render = (container, state) => {
 
 const reduce = (nodes, updatingId) => {
     return packNodes({
-        maxWidth: params.containerWidth,
+        containerWidth: params.containerWidth,
         updatingId,
         nodes
     });

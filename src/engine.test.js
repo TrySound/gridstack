@@ -41,7 +41,7 @@ test('pack and hoist single node', () => {
 test('pack and move single constrained node', () => {
     expect(
         packNodes({
-            maxWidth: 5,
+            containerWidth: 5,
             nodes: [
                 { id: 1, x: 6, y: 1, width: 2, height: 2 }
             ]
@@ -54,7 +54,7 @@ test('pack and move single constrained node', () => {
 test('pack and cuts off too wide constrained node', () => {
     expect(
         packNodes({
-            maxWidth: 5,
+            containerWidth: 5,
             nodes: [
                 { id: 1, x: 3, y: 2, width: 7, height: 3 }
             ]
@@ -98,7 +98,7 @@ test('pack and hoist three nodes', () => {
 test('pack and stack constrained nodes', () => {
     expect(
         packNodes({
-            maxWidth: 5,
+            containerWidth: 5,
             nodes: [
                 { id: 1, x: 3, y: 3, width: 4, height: 4 },
                 { id: 2, x: 1, y: 1, width: 3, height: 3 }

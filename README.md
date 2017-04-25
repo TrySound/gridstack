@@ -23,7 +23,7 @@ type Node = {
 ```js
 packNodes({
     hoist: false,
-    maxWidth: Infinity, // cells
+    containerWidth: Infinity, // cells
     updatingId: null,
     nodes: Nodes[]
 }): Nodes[]
