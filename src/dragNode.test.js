@@ -319,3 +319,45 @@ test('resize node with min width from left and top', () => {
         node: { x: 3, y: 3, width: 2, height: 2 }
     });
 });
+
+test('resize node with max width from right and bottom', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                maxWidth: 4,
+                maxHeight: 4,
+                resize: {
+                    right: true,
+                    bottom: true
+                }
+            }),
+            node: { x: 1, y: 1, width: 2, height: 2 },
+            action: { startX: 86, startY: 86, endX: 200, endY: 200 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 30, y: 30, width: 120, height: 120 },
+        node: { x: 1, y: 1, width: 4, height: 4 }
+    });
+});
+
+test('resize node with max width from left and top', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                maxWidth: 4,
+                maxHeight: 4,
+                resize: {
+                    left: true,
+                    top: true
+                }
+            }),
+            node: { x: 4, y: 4, width: 2, height: 2 },
+            action: { startX: 124, startY: 124, endX: 20, endY: 20 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 60, y: 60, width: 120, height: 120 },
+        node: { x: 2, y: 2, width: 4, height: 4 }
+    });
+});

@@ -1,10 +1,14 @@
+const wrap = (min, value, max) => Math.min(Math.max(min, value), max);
+
 const resizeNode = (node, params, action, resize) => {
-    const { cellWidth, cellHeight, minWidth = 1, minHeight = 1 } = params;
+    const { cellWidth, cellHeight, minWidth = 1, minHeight = 1, maxWidth = Infinity, maxHeight = Infinity } = params;
     const nodeX = node.x * cellWidth;
     const nodeWidth = node.width * cellWidth;
     const nodeY = node.y * cellHeight;
     const nodeHeight = node.height * cellHeight;
 
+    const minX = maxWidth === Infinity ? 0 : node.x + node.width - maxWidth;
+    const minY = maxHeight === Infinity ? 0 : node.y + node.height - maxWidth;
     const maxX = node.x + node.width - minWidth;
     const maxY = node.y + node.height - minHeight;
 
@@ -28,16 +32,24 @@ const resizeNode = (node, params, action, resize) => {
     return {
         type: 'resize',
         element: {
-            x: Math.min(maxX * cellWidth, nodeX + (resize.left ? elementDx : 0)),
-            y: Math.min(maxY * cellHeight, nodeY + (resize.top ? elementDy : 0)),
-            width: Math.max(minWidth * cellWidth, nodeWidth + (resize.left ? -1 : resize.right ? 1 : 0) * elementDx),
-            height: Math.max(minHeight * cellHeight, nodeHeight + (resize.top ? -1 : resize.bottom ? 1 : 0) * elementDy)
+            x: wrap(minX * cellWidth, nodeX + (resize.left ? elementDx : 0), maxX * cellWidth),
+            y: wrap(minY * cellHeight, nodeY + (resize.top ? elementDy : 0), maxY * cellHeight),
+            width: wrap(
+                minWidth * cellWidth,
+                nodeWidth + (resize.left ? -1 : resize.right ? 1 : 0) * elementDx,
+                maxWidth * cellWidth
+            ),
+            height: wrap(
+                minHeight * cellHeight,
+                nodeHeight + (resize.top ? -1 : resize.bottom ? 1 : 0) * elementDy,
+                maxHeight * cellHeight
+            )
         },
         node: Object.assign({}, node, {
-            x: Math.min(maxX, node.x + (resize.left ? nodeDx : 0)),
-            y: Math.min(maxY, node.y + (resize.top ? nodeDy : 0)),
-            width: Math.max(minWidth, node.width + (resize.left ? -1 : resize.right ? 1 : 0) * nodeDx),
-            height: Math.max(minHeight, node.height + (resize.top ? -1 : resize.bottom ? 1 : 0) * nodeDy)
+            x: wrap(minX, node.x + (resize.left ? nodeDx : 0), maxX),
+            y: wrap(minY, node.y + (resize.top ? nodeDy : 0), maxY),
+            width: wrap(minWidth, node.width + (resize.left ? -1 : resize.right ? 1 : 0) * nodeDx, maxWidth),
+            height: wrap(minHeight, node.height + (resize.top ? -1 : resize.bottom ? 1 : 0) * nodeDy, maxHeight)
         })
     };
 };
