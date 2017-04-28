@@ -4,7 +4,7 @@ const resizeNode = (node, params, action, resize) => {
     const { cellWidth, cellHeight, minWidth = 1, minHeight = 1, maxWidth = Infinity, maxHeight = Infinity } = params;
 
     const minX = maxWidth === Infinity ? 0 : node.x + node.width - maxWidth;
-    const minY = maxHeight === Infinity ? 0 : node.y + node.height - maxWidth;
+    const minY = maxHeight === Infinity ? 0 : node.y + node.height - maxHeight;
     const maxX = node.x + node.width - minWidth;
     const maxY = node.y + node.height - minHeight;
 

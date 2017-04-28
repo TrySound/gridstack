@@ -361,3 +361,29 @@ test('resize node with max width from left and top', () => {
         node: { x: 2, y: 2, width: 4, height: 4 }
     });
 });
+
+test('resize from bottom to top issue #1', () => {
+    expect(
+        dragNode({
+            params: {
+                cellWidth: 108,
+                cellHeight: 67,
+                minWidth: 2,
+                minHeight: 3,
+                maxWidth: 6,
+                maxHeight: 13,
+                padding: 8,
+                resize: {
+                    right: true,
+                    bottom: true
+                }
+            },
+            node: { x: 0, y: 3, width: 4, height: 8 },
+            action: { startX: 197, startY: 725, endX: 197, endY: 721 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { x: 0, y: 201, height: 532, width: 432 },
+        node: { x: 0, y: 3, width: 4, height: 8 }
+    });
+});
