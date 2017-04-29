@@ -14,7 +14,8 @@ type Node = {
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
+    static: boolean
 }
 ```
 
