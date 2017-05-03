@@ -37,6 +37,7 @@ const resizeNode = (node, params, action, resize) => {
     return {
         type: 'resize',
         element: {
+            id: node.id,
             x: wrap(minX * cellWidth, elementX + (resize.left ? elementDx : 0), maxX * cellWidth),
             y: wrap(minY * cellHeight, elementY + (resize.top ? elementDy : 0), maxY * cellHeight),
             width: wrap(minWidth * cellWidth, elementWidth + dirX * elementDx, maxWidth * cellWidth),
@@ -59,6 +60,7 @@ const moveNode = (node, params, action) => {
     return {
         type: 'move',
         element: {
+            id: node.id,
             x: node.x * params.cellWidth + elementDx,
             y: node.y * params.cellHeight + elementDy,
             width: node.width * params.cellWidth,

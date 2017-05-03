@@ -6,7 +6,7 @@ const getMouse = (element, event) => {
 const trackDrag = ({
     container,
     mouseMoveOffset = 2,
-    isDraggable: () => true,
+    isDraggable = () => true,
     dispatch
 }) => {
     const onMouseDown = downEvent => {
