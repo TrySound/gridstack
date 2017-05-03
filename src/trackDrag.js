@@ -5,7 +5,8 @@ const getMouse = (element, event) => {
 
 const trackDrag = ({
     container,
-    mouseMoveOffset = 3,
+    mouseMoveOffset = 2,
+    isDraggable: () => true,
     dispatch
 }) => {
     const onMouseDown = downEvent => {
@@ -14,11 +15,12 @@ const trackDrag = ({
             type: 'start',
             x: startX,
             y: startY
-        }, downEvent.target);
+        });
 
         const onMouseMove = e => {
             const [endX, endY] = getMouse(container, e);
-            if (mouseMoveOffset < Math.abs(endX - startX) || mouseMoveOffset < Math.abs(endY - startY)) {
+            const wasDragged = mouseMoveOffset < Math.abs(endX - startX) || mouseMoveOffset < Math.abs(endY - startY);
+            if (wasDragged && isDraggable(downEvent.target)) {
                 e.preventDefault();
                 dispatch({
                     type: 'drag',
@@ -26,7 +28,7 @@ const trackDrag = ({
                     startY,
                     endX,
                     endY
-                }, downEvent.target);
+                });
             }
         };
 
@@ -38,7 +40,7 @@ const trackDrag = ({
                 startY,
                 endX,
                 endY
-            }, downEvent.target);
+            });
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };

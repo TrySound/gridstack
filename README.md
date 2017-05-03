@@ -35,7 +35,8 @@ packNodes({
 ```js
 trackDrag({
     container: HTMLElement,
-    mouseMoveOffset = 3, // pixels
+    mouseMoveOffset = 2, // pixels
+    isDraggable: Element => boolean
     dispatch: (action, startTarget: HTMLElement) => void
 })
 ```
