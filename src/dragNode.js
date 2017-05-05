@@ -53,22 +53,24 @@ const resizeNode = (node, params, action, resize) => {
 };
 
 const moveNode = (node, params, action) => {
+    const { cellWidth, cellHeight, containerWidth = Infinity } = params;
+    const maxX = containerWidth - node.width;
     const elementDx = action.endX - action.startX;
     const elementDy = action.endY - action.startY;
-    const dx = Math.floor(action.endX / params.cellWidth) - Math.floor(action.startX / params.cellWidth);
-    const dy = Math.floor(action.endY / params.cellHeight) - Math.floor(action.startY / params.cellHeight);
+    const dx = Math.floor(action.endX / cellWidth) - Math.floor(action.startX / cellWidth);
+    const dy = Math.floor(action.endY / cellHeight) - Math.floor(action.startY / cellHeight);
     return {
         type: 'move',
         element: {
             id: node.id,
-            x: node.x * params.cellWidth + elementDx,
-            y: node.y * params.cellHeight + elementDy,
-            width: node.width * params.cellWidth,
+            x: wrap(0, node.x * cellWidth + elementDx, maxX * cellWidth),
+            y: wrap(0, node.y * cellHeight + elementDy, Infinity),
+            width: node.width * cellWidth,
             height: node.height * params.cellHeight
         },
         node: Object.assign({}, node, {
-            x: node.x + dx,
-            y: node.y + dy
+            x: wrap(0, node.x + dx, maxX),
+            y: wrap(0, node.y + dy, Infinity)
         })
     };
 };

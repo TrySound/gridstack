@@ -387,3 +387,34 @@ test('resize from bottom to top issue #1', () => {
         node: { id: '1', x: 0, y: 3, width: 4, height: 8 }
     });
 });
+
+test('move is constrained with zero', () => {
+    expect(
+        dragNode({
+            params: getParams(),
+            node: { id: '1', x: 1, y: 1, width: 2, height: 2 },
+            action: { startX: 45, startY: 45, endX: -100, endY: -100 }
+        })
+    ).toEqual({
+        type: 'move',
+        element: { id: '1', x: 0, y: 0, width: 60, height: 60 },
+        node: { id: '1', x: 0, y: 0, width: 2, height: 2 }
+    });
+});
+
+test('move is constrained with containerWidth', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                containerWidth: 4
+            }),
+            node: { id: '1', x: 1, y: 1, width: 2, height: 2 },
+            action: { startX: 45, startY: 45, endX: 200, endY: 45 }
+        })
+    ).toEqual({
+        type: 'move',
+        element: { id: '1', x: 60, y: 30, width: 60, height: 60 },
+        node: { id: '1', x: 2, y: 1, width: 2, height: 2 }
+    });
+});
+
