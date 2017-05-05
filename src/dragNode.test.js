@@ -418,3 +418,23 @@ test('move is constrained with containerWidth', () => {
     });
 });
 
+test.only('resize is constrained with containerWidth and maxWidth', () => {
+    expect(
+        dragNode({
+            params: getParams({
+                containerWidth: 4,
+                maxWidth: 6,
+                resize: {
+                    right: true
+                }
+            }),
+            node: { id: '1', x: 1, y: 1, width: 2, height: 2 },
+            action: { startX: 86, startY: 75, endX: 300, endY: 75 }
+        })
+    ).toEqual({
+        type: 'resize',
+        element: { id: '1', x: 30, y: 30, width: 90, height: 60 },
+        node: { id: '1', x: 1, y: 1, width: 3, height: 2 }
+    });
+});
+

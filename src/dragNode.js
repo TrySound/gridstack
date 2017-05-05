@@ -1,11 +1,16 @@
 const wrap = (min, value, max) => Math.min(Math.max(min, value), max);
 
+const applyDefaults = ({ minWidth = 1, minHeight = 1, maxWidth = Infinity, maxHeight = Infinity, containerWidth = Infinity }) => {
+    return { minWidth, minHeight, maxWidth, maxHeight, containerWidth };
+};
+
 const resizeNode = (node, params, action, resize) => {
-    const { cellWidth, cellHeight, minWidth = 1, minHeight = 1, maxWidth = Infinity, maxHeight = Infinity } = params;
+    const { cellWidth, cellHeight } = params;
+    const { minWidth, minHeight, maxWidth, maxHeight, containerWidth } = applyDefaults(params);
 
     const minX = maxWidth === Infinity ? 0 : node.x + node.width - maxWidth;
     const minY = maxHeight === Infinity ? 0 : node.y + node.height - maxHeight;
-    const maxX = node.x + node.width - minWidth;
+    const maxX = Math.min(node.x + node.width - minWidth, containerWidth - node.x);
     const maxY = node.y + node.height - minHeight;
 
     const dirX = (resize.left ? -1 : resize.right ? 1 : 0);
@@ -53,7 +58,8 @@ const resizeNode = (node, params, action, resize) => {
 };
 
 const moveNode = (node, params, action) => {
-    const { cellWidth, cellHeight, containerWidth = Infinity } = params;
+    const { cellWidth, cellHeight } = params;
+    const { containerWidth } = applyDefaults(params);
     const maxX = containerWidth - node.width;
     const elementDx = action.endX - action.startX;
     const elementDy = action.endY - action.startY;
